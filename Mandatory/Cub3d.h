@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include "get_next_line/get_next_line.h"
 #include "libft/libft.h"
 #include <fcntl.h>
 #include "../MLX42/include/MLX42/MLX42.h"
@@ -27,5 +28,8 @@ struct s_map
     int     map_width;
     int     map_hight;
 };
+
+void error(char *st);
+t_map *parsing(char *filename, t_map *map);
 
 #endif

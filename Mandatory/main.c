@@ -1,7 +1,21 @@
 #include "Cub3d.h"
 
-t_map *parsing(char *input)
+void error(char *st)
 {
+	ft_putstr_fd(2 ,str);
+	exit(1);
+}
+
+t_map *parsing(char *filename, t_map *map)
+{
+	int fd;
+	char *line;
+
+	fd = open(filename, O_RDONLY)
+	if(fd < 0)
+		return (error("Cant open file"));
+	
+
 }
 
 int main(int ac, char **av)
@@ -19,5 +33,5 @@ int main(int ac, char **av)
 		printf("Error\n");
 		return 1;
 	}
-	map = parsing(av[1]);
+	map = parsing(av[1], map);
 }
