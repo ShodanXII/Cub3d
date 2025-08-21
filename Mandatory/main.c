@@ -1,5 +1,7 @@
 #include "Cub3d.h"
 
+
+
 int main(int ac, char **av)
 {
 	if (ac != 2)
@@ -13,4 +15,5 @@ int main(int ac, char **av)
 		printf("Error\n");
 		return 1;
 	}
+	parsing(av[1]);
 }
