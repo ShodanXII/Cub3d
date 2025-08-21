@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
-#include "libft/libft.h"
 #include <fcntl.h>
 #include "../MLX42/include/MLX42/MLX42.h"
 
