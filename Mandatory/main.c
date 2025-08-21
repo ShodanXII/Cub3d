@@ -2,14 +2,15 @@
 
 int main(int ac, char **av)
 {
-	if (ac != 2 || strcmp(av[1] + strlen(av[1]) - 4, ".cub") != 0)
+	if (ac != 2)
 	{
 		printf("Error\n");
 		return 1;
 	}
-	if (open(av[1], O_RDONLY) == -1)
+	int len = strlen(av[1]);
+	if (len < 4 || strcmp(av[1] + len - 4, ".cub") != 0 || open(av[1], O_RDONLY) == -1)
 	{
-		printf("Error1\n");
+		printf("Error\n");
 		return 1;
 	}
 }
