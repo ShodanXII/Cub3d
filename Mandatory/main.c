@@ -1,9 +1,13 @@
 #include "Cub3d.h"
 
-
+t_map *parsing(char *input)
+{
+}
 
 int main(int ac, char **av)
 {
+	t_map	*map;
+
 	if (ac != 2)
 	{
 		printf("Error\n");
@@ -15,5 +19,5 @@ int main(int ac, char **av)
 		printf("Error\n");
 		return 1;
 	}
-	parsing(av[1]);
+	map = parsing(av[1]);
 }
