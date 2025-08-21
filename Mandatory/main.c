@@ -16,19 +16,19 @@ t_map *parsing(char *filename, t_map *map)
 		error("Cant open file");
 	while(line = get_next_line(fd))
 	{
-		if(is_NO(line)) // to do
-			parsing_north(input, map); // to do thid functions 
-		else if(is_WE(line)) // to do hadi 
+		if(ft_strcmp(line, "NO"))
+			parsing_north(input, map); // to do this functions 
+		else if(ft_strcmp(line, "WE"))
 			parsing_WE(line , map); // to do
-		else if(is_EA(input))// to do
+		else if(ft_strcmp(input, "EA"))
 			parsing_EA(line, map); // to do
-		else if(is_SO(line)) // to do
+		else if(ft_strcmp(line, "SO")) 
 			parsing_SO(line, map); /// to do
-		else if(is_F(line)) /// to do
+		else if(ft_strcmp(line,"F"))
 			parsing_F(line, map);// to do
-		else if(is_C(line))/// to fdo
+		else if(ft_strcmp(line, "C"))
 			parsing_C(line, map); // to do
-		else if(is_map(line))// to do
+		else if(is_map(line, ))// to do
 			parsing_map(line , map);// to do
 		else
 			error("Input Mangoli"); // hna ma tnsax aykon leak d line w map freehom mnba3d
