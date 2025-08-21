@@ -13,9 +13,28 @@ t_map *parsing(char *filename, t_map *map)
 
 	fd = open(filename, O_RDONLY)
 	if(fd < 0)
-		return (error("Cant open file"));
-	
-
+		error("Cant open file");
+	while(line = get_next_line(fd))
+	{
+		if(is_NO(line)) // to do
+			parsing_north(input, map); // to do thid functions 
+		else if(is_WE(line)) // to do hadi 
+			parsing_WE(line , map); // to do
+		else if(is_EA(input))// to do
+			parsing_EA(line, map); // to do
+		else if(is_SO(line)) // to do
+			parsing_SO(line, map); /// to do
+		else if(is_F(line)) /// to do
+			parsing_F(line, map);// to do
+		else if(is_C(line))/// to fdo
+			parsing_C(line, map); // to do
+		else if(is_map(line))// to do
+			parsing_map(line , map);// to do
+		else
+			error("Input Mangoli"); // hna ma tnsax aykon leak d line w map freehom mnba3d
+		free(line);
+	}
+	close(fd);
 }
 
 int main(int ac, char **av)
