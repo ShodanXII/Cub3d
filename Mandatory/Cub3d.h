@@ -6,7 +6,30 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include "get_next_line/get_next_line.h"
+#include "libft/libft.h"
 #include <fcntl.h>
 #include "../MLX42/include/MLX42/MLX42.h"
+
+typedef struct s_map t_map;
+
+struct s_map
+{
+    int player_x;
+    int player_y;
+    int player_dir;
+    char    *NO_path;
+    char    *WE_path;
+    char    *EA_path;
+    char    *SO_path;
+    int     f_rgb[3];
+    int     c_rgb[3];
+    char    **map;
+    int     map_width;
+    int     map_hight;
+};
+
+void error(char *st);
+t_map *parsing(char *filename, t_map *map);
 
 #endif
