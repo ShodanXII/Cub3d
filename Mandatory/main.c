@@ -24,26 +24,38 @@ void parsing(t_map *map, int fd)
 
 	while((line = get_next_line(fd)))
 	{
-		work = ft_split(line, 32);
-		printf("work ----> %s\n", work[0]);
+		work = ft_split(line);
 		if(strcmp(work[0], "NO") == 0)
+		{
 			printf("no\n");
+
 			// parsing_north(line, map); // to do this functions 
-		else if(strcmp(work[0], "WE") == 0)
-			printf("we\n");
-			// parsing_WE(line , map); // to do
-		else if(strcmp(work[0], "EA") == 0)
-			printf("ea\n");
-			// parsing_EA(line, map); // to do
+		}
 		else if(strcmp(work[0], "SO") == 0)
+		{
 			printf("so\n");
 			// parsing_SO(line, map); /// to do
+		}
+		else if(strcmp(work[0], "EA") == 0)
+		{
+			printf("ea\n");
+			// parsing_EA(line, map); // to do
+		}
+		else if(strcmp(work[0], "WE") == 0)
+		{
+			printf("we\n");
+			// parsing_WE(line , map); // to do
+		}
 		else if(strcmp(work[0], "F") == 0)
+		{
 			printf("f\n");
 			// parsing_F(line, map);// to do
+		}
 		else if(strcmp(work[0], "C") == 0)
+		{
 			printf("c\n");
 			// parsing_C(line, map); // to do
+		}
 		// else if(is_map(line))// to do
 		// 	parsing_map(line , map);// to do
 		// else (isspace(line))
@@ -66,7 +78,6 @@ int main(int ac, char **av)
 	}
 	int len = strlen(av[1]);
 	int fd = open(av[1], O_RDONLY);
-	printf("fd = %d\n", fd);
 	if (len < 4 || strcmp(av[1] + len - 4, ".cub") != 0 || fd == -1)
 	{
 		printf("Error\n");

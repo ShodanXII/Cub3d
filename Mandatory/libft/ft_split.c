@@ -3,102 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 09:44:03 by achat             #+#    #+#             */
-/*   Updated: 2024/11/05 11:57:30 by achat            ###   ########.fr       */
+/*   Updated: 2025/08/22 15:41:43 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	count_tokens(const char *s, char c);
-static size_t	fller(char **tokens_v, const char *s, char c);
-static size_t	ft_free(char **tokens_v, int position, size_t buffer);
-
-char	**ft_split(const char *s, char c)
+static int	count_words(char const *str, char c, char a)
 {
-	size_t	tokens;
-	char	**tokens_v;
+	size_t	i;
+	size_t	count;
 
-	if (NULL == s)
-		return (NULL);
-	tokens = 0;
-	tokens = count_tokens(s, c);
-	tokens_v = ft_calloc(tokens + 1, sizeof(char *));
-	if (!tokens_v)
-		return (NULL);
-	tokens_v[tokens] = NULL;
-	if (fller(tokens_v, s, c))
-		return (NULL);
-	return (tokens_v);
-}
-
-static size_t	ft_free(char **tokens_v, int position, size_t buffer)
-{
-	int	i;
-
+	count = 0;
 	i = 0;
-	tokens_v[position] = malloc(buffer);
-	if (NULL == tokens_v[position])
+	while (str[i])
 	{
-		while (i < position)
+		if (str[i] == c || str[i] == a)
+			i++;
+		else
 		{
-			free(tokens_v[i++]);
+			count++;
+			while (str[i] && str[i] != c && str[i] != a)
+				i++;
 		}
-		free(tokens_v);
-		return (1);
 	}
-	return (0);
+	return (count);
 }
 
-static size_t	fller(char **tokens_v, char const *s, char c)
+static void	*free_split(char **split, int j)
 {
-	size_t	len;
+	int	k;
+
+	if (!split)
+		return (NULL);
+	k = 0;
+	while (k < j)
+	{
+		free(split[k]);
+		k++;
+	}
+	free(split);
+	return (NULL);
+}
+
+static char	**my_split(char const *s, char **split, int end)
+{
+	int	j;
+	int	start;
+
+	j = 0;
+	start = 0;
+	split = malloc((count_words((char *)s, 32, ',') + 1) * sizeof(char *));
+	if (!s || !split)
+		return (NULL);
+	while (s[end])
+	{
+		while (s[end] == 32 || s[end] == ',')
+			end++;
+		if (s[end] != '\0')
+		{
+			start = end;
+			while (s[end] && s[end] != 32 && s[end] != ',')
+				end++;
+			split[j] = ft_substr(s, start, end - start);
+			if (!split[j])
+				return (free_split(split, j));
+			j++;
+		}
+	}
+	split[j] = NULL;
+	return (split);
+}
+
+char	**ft_split(char const *s)
+{
+	char	**split;
 	int		i;
 
+	split = NULL;
 	i = 0;
-	while (*s)
-	{
-		len = 0;
-		while (*s == c && *s)
-			++s;
-		while (*s != c && *s)
-		{
-			++len;
-			++s;
-		}
-		if (len)
-		{
-			if (ft_free(tokens_v, i, len + 1))
-				return (1);
-			ft_strlcpy(tokens_v[i], s - len, len + 1);
-		}
-		++i;
-	}
-	return (0);
-}
-
-static size_t	count_tokens(char const *s, char delimeter)
-{
-	size_t	tokens;
-	int		inside_token;
-
-	tokens = 0;
-	while (*s)
-	{
-		inside_token = 0;
-		while (*s == delimeter && *s)
-			++s;
-		while (*s != delimeter && *s)
-		{
-			if (!inside_token)
-			{
-				++tokens;
-				inside_token = 42;
-			}
-			++s;
-		}
-	}
-	return (tokens);
+	return (my_split(s, split, i));
 }
