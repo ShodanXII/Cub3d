@@ -6,7 +6,7 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 16:26:06 by achat             #+#    #+#             */
-/*   Updated: 2025/08/22 15:41:01 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/08/22 16:19:08 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char				*ft_strdup(const char *s1);
 void				*ft_calloc(size_t count, size_t size);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_itoa(int n);
-char				**ft_split(char const *s);
+char				**ft_split(char const *s, int count);
 char				*ft_strjoin(char const *s1, char const *s2);
 
 #endif

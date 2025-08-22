@@ -6,32 +6,11 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 09:44:03 by achat             #+#    #+#             */
-/*   Updated: 2025/08/22 15:41:43 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/08/22 16:18:41 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static int	count_words(char const *str, char c, char a)
-{
-	size_t	i;
-	size_t	count;
-
-	count = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == c || str[i] == a)
-			i++;
-		else
-		{
-			count++;
-			while (str[i] && str[i] != c && str[i] != a)
-				i++;
-		}
-	}
-	return (count);
-}
 
 static void	*free_split(char **split, int j)
 {
@@ -49,14 +28,14 @@ static void	*free_split(char **split, int j)
 	return (NULL);
 }
 
-static char	**my_split(char const *s, char **split, int end)
+static char	**my_split(char const *s, char **split, int end, int count)
 {
 	int	j;
 	int	start;
 
 	j = 0;
 	start = 0;
-	split = malloc((count_words((char *)s, 32, ',') + 1) * sizeof(char *));
+	split = malloc((count + 1) * sizeof(char *));
 	if (!s || !split)
 		return (NULL);
 	while (s[end])
@@ -78,12 +57,12 @@ static char	**my_split(char const *s, char **split, int end)
 	return (split);
 }
 
-char	**ft_split(char const *s)
+char	**ft_split(char const *s, int count)
 {
 	char	**split;
 	int		i;
 
 	split = NULL;
 	i = 0;
-	return (my_split(s, split, i));
+	return (my_split(s, split, i, count));
 }
