@@ -3,112 +3,95 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 13:41:13 by achat             #+#    #+#             */
-/*   Updated: 2024/12/09 11:20:41 by achat            ###   ########.fr       */
+/*   Created: 2024/12/13 19:54:18 by ouel-afi          #+#    #+#             */
+/*   Updated: 2025/08/22 13:10:48 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*jib_line(char **storage)
+static char	*append_read(char **combine, int fd)
 {
-	char	*line;
-	char	*newline_ptr;
-	char	*temp;
+	char		buffer[BUFFER_SIZE + 1];
+	char		*tmp;
+	ssize_t		bytes_read;
 
-	if (!storage || !*storage)
+	if (!combine || fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	newline_ptr = ft_strchr(*storage, '\n');
-	if (newline_ptr)
+	bytes_read = 1;
+	while (bytes_read != 0 && (!*combine || ft_strchr1(*combine, '\n') == NULL))
 	{
-		line = ft_substr(*storage, 0, newline_ptr - *storage + 1);
-		temp = ft_strdup(newline_ptr + 1);
-		free(*storage);
-		*storage = temp;
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read < 0)
+		{
+			free(*combine);
+			return (NULL);
+		}
+		buffer[bytes_read] = '\0';
+		tmp = ft_strjoin1(*combine, NULL);
+		free(*combine);
+		*combine = ft_strjoin1(tmp, buffer);
+		free(tmp);
 	}
-	else
-	{
-		line = ft_strdup(*storage);
-		free(*storage); 
-		*storage = NULL;
-	}
-	return (line);
+	return (*combine);
 }
 
-static int	stor_line(int fd, char **storage)
+static char	*sub_line(char *line)
 {
-	char	*buffer;
-	char	*temp;
-	ssize_t	bytes_read;
+	int	i;
 
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (-1);
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	while (bytes_read > 0)
+	i = 0;
+	if (!line || ft_strlen1(line) == 0)
+		return (NULL);
+	while (line[i] != '\n' && line[i] != '\0')
+		i++;
+	if (line[i] == '\n')
+		i++;
+	return (ft_substr1(line, 0, i));
+}
+
+static char	*rest_func(char *combine)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+
+	i = 0;
+	j = 0;
+	if (!combine)
+		return (NULL);
+	while (combine[i] != '\n' && combine[i] != '\0')
+		i++;
+	if (combine[i] == '\n')
+		i++;
+	if (combine[i] == '\0')
 	{
-		buffer[bytes_read] = '\0';
-		temp = ft_strjoin(*storage, buffer);
-		free(*storage);
-		*storage = temp;
-		if (ft_strchr (buffer, '\n'))
-			break ;
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		free(combine);
+		return (NULL);
 	}
-	free(buffer);
-	if (bytes_read == -1 && *storage)
-	{
-		free(*storage);
-		*storage = NULL;
-	}
-	return (bytes_read);
+	tmp = malloc(ft_strlen1(combine) - i + 1);
+	if (!tmp)
+		return (NULL);
+	while (combine[i])
+		tmp[j++] = combine[i++];
+	tmp[j] = '\0';
+	free(combine);
+	return (tmp);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*storage;
+	static char	*combine;
 	char		*line;
-	int			bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	bytes_read = stor_line(fd, &storage);
-	if (bytes_read < 0)
-	{
-		if (storage)
-		{
-			free(storage);
-			storage = NULL;
-		}
+	combine = append_read(&combine, fd);
+	if (!combine)
 		return (NULL);
-	}
-	if (!storage && bytes_read == 0)
-		return (NULL);
-	line = jib_line(&storage);
-	if (!line || !*line)
-		return (free(storage), storage = NULL, free(line), line = NULL);
+	line = sub_line(combine);
+	combine = rest_func(combine);
 	return (line);
 }
-// #include <stdio.h>
-// #include <fcntl.h>
-
-// int main()
-// {
-//     int fd;
-// 	int i = 0;
-//     char *line;
-
-//     fd = open("gg.txt", O_RDONLY);
-// 	line = get_next_line(fd);
-//     while (i < 2)
-// 	{
-// 		printf("%s\n", line);
-// 		i++;
-// 	}
-// 	free(line);
-//     // line = get_next_line(fd);
-// 	close(fd);
-// 	return (0);
-// }

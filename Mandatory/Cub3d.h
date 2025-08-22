@@ -6,8 +6,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
-#include "get_next_line/get_next_line.h"
 #include "libft/libft.h"
+#include "get_next_line/get_next_line.h"
 #include <fcntl.h>
 #include "../MLX42/include/MLX42/MLX42.h"
 
@@ -30,6 +30,6 @@ struct s_map
 };
 
 void error(char *st);
-t_map *parsing(char *filename, t_map *map);
+void parsing(t_map *map, int fd);
 
 #endif
