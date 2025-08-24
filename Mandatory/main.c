@@ -6,6 +6,14 @@ void error(char *str)
 	exit(1);
 }
 
+t_map *inti_data(t_map *map)
+{
+	map = malloc(sizeof(t_map));
+	if(!map)
+		error("allocation mangoli");
+	ft_memset(map, 0, sizeof(t_map));
+	return map;
+}
 void print_split(char **split)
 {
 	int i = 0;
@@ -53,7 +61,6 @@ void parse_fc(char **av, int count)
 	int r = ft_atoi(av[1]);
 	int g = ft_atoi(av[2]);
 	int b = ft_atoi(av[3]);
-	printf("r --> %d		g --> %d			b --> %d\n", r, g, b);
 	if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
 		error("no_color");
 }
@@ -111,5 +118,6 @@ int main(int ac, char **av)
 		printf("Error\n");
 		return 1;
 	}
+	map = inti_data(map);
 	parsing(map, fd);
 }
