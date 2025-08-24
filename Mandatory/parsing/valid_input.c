@@ -10,10 +10,6 @@ char *validate_texture(char *path, char *texture_name)
     int len = ft_strlen(path);
     if (len < 4 || strcmp(path + len - 4, ".xpm"))
         error(ft_strjoin(texture_name, " texture must be a .xpm file"));
-    fd = open(path, O_RDONLY);
-    if (fd == -1)
-        error(ft_strjoin("Cannot open ", texture_name));
-    close(fd);
     char *dup = ft_strdup(path);
     if (!dup)
         error("Memory allocation failed");   

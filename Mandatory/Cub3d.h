@@ -23,7 +23,11 @@
 # include <fcntl.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 
+typedef struct s_data	t_data;
+typedef struct s_player	t_player;
 typedef struct s_map	t_map;
+#define WIDTH	800
+#define HIGHT	800
 
 struct s_map
 {
@@ -41,7 +45,27 @@ struct s_map
 	int		map_hight;
 };
 
+struct s_player
+{
+    double pos_x;
+    double pos_y;
+    double dir_x;
+    double dir_y;
+    double plane_x;
+    double plane_y;
+    double move_speed;
+    double rot_speed;
+};
+
+struct s_data
+{
+	mlx_image_t	*img;
+	mlx_t	*window;
+	mlx_t	*mlx;
+};
+
 void	error(char *st);
 void	parsing(t_map *map, int fd);
+void init_mlx(t_data *data);
 
 #endif

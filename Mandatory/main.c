@@ -120,4 +120,5 @@ int main(int ac, char **av)
 	}
 	map = inti_data(map);
 	parsing(map, fd);
+	init_mlx(t_data *data);
 }
