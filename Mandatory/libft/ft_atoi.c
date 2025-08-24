@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:49:49 by achat             #+#    #+#             */
-/*   Updated: 2024/10/29 12:37:36 by achat            ###   ########.fr       */
+/*   Updated: 2025/08/24 12:33:53 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,21 @@ int	ft_atoi(const char *str)
 	i = 0;
 	while (ft_isspace(str[i]))
 		i++;
-	if (str[i] == '+' && str[i + 1] != '-')
-		i++;
-	if (str[i] == '-')
+	if (str[i] == '-' || str[i] == '+')
 	{
-		sign = -1;
+		if (str[i] == '-')
+			sign = -1;
 		i++;
 	}
-	while (str[i] && str[i] >= 48 && str[i] <= 57)
+	while (str[i] >= 48 && str[i] <= 57)
 	{
 		result *= 10;
 		result += str[i] - 48;
 		i++;
 	}
-	return (result *= sign);
+	if (str[i] != '\0' && str[i] != '\n')
+		return (-1);
+	return (result * sign);
 }
 
 static int	ft_isspace(int c)

@@ -37,14 +37,25 @@ static int	count_words(char const *str, char c, char a)
 	return (count);
 }
 
-void parse_north(char *north, int count)
+void parse_side(char *side, int count)
 {
-	int fd;
 	if (count != 2)
 		error("bzzf args\n");
-	int len = ft_strlen(north);
-	if (len < 4 || strcmp(north + len - 4, ".xpm"))
+	int len = strlen(side);
+	if (len < 4 || strcmp(side + len - 5, ".xpm\n"))
 		error("no_pic\n");
+}
+
+void parse_fc(char **av, int count)
+{
+	if (count != 4)
+		error("bzzf args\n");
+	int r = ft_atoi(av[1]);
+	int g = ft_atoi(av[2]);
+	int b = ft_atoi(av[3]);
+	printf("r --> %d		g --> %d			b --> %d\n", r, g, b);
+	if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+		error("no_color");
 }
 
 void parsing(t_map *map, int fd)
@@ -56,20 +67,23 @@ void parsing(t_map *map, int fd)
 
 	while((line = get_next_line(fd)))
 	{
+		if (line[0] == '\n')
+			continue;
 		count = count_words(line, 32, ',');
 		work = ft_split(line, count);
+		print_split(work);
 		if(strcmp(work[0], "NO") == 0)
-			parse_north(work[1], count);
+			parse_side(work[1], count);
 		else if(strcmp(work[0], "SO") == 0)
-			printf("so\n");
+			parse_side(work[1], count);
 		else if(strcmp(work[0], "EA") == 0)
-			printf("ea\n");
+			parse_side(work[1], count);
 		else if(strcmp(work[0], "WE") == 0)
-			printf("we\n");
+			parse_side(work[1], count);
 		else if(strcmp(work[0], "F") == 0)
-			printf("f\n");
+			parse_fc(work, count);
 		else if(strcmp(work[0], "C") == 0)
-			printf("c\n");
+			parse_fc(work, count);
 		// else if(is_map(line))// to do
 		// 	parsing_map(line , map);// to do
 		// else (isspace(line))
