@@ -60,12 +60,14 @@ struct s_player
 struct s_data
 {
 	mlx_image_t	*img;
-	mlx_t	*window;
+	t_map		*map;
 	mlx_t	*mlx;
 };
 
 void	error(char *st);
 void	parsing(t_map *map, int fd);
 void init_mlx(t_data *data);
+void temp_render(t_data *data);
+void loop_hook(void *param);
 
 #endif

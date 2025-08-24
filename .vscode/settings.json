@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "array": "c",
+        "string": "c",
+        "string_view": "c"
     }
 }

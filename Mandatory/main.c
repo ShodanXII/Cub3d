@@ -105,6 +105,7 @@ void parsing(t_map *map, int fd)
 int main(int ac, char **av)
 {
 	t_map	*map;
+	t_data	data;
 
 	if (ac != 2)
 	{
@@ -119,6 +120,9 @@ int main(int ac, char **av)
 		return 1;
 	}
 	map = inti_data(map);
-	parsing(map, fd);
-	init_mlx(t_data *data);
+    parsing(map, fd);
+    data.map = map;
+    init_mlx(&data);    
+    mlx_loop_hook(data.mlx, &loop_hook, &data);    
+    mlx_loop(data.mlx);
 }
