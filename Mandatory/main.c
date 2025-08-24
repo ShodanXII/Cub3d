@@ -6,6 +6,14 @@ void error(char *str)
 	exit(1);
 }
 
+t_map *inti_data(t_map *map)
+{
+	map = malloc(sizeof(t_map));
+	if(!map)
+		error("allocation mangoli");
+	ft_memset(map, 0, sizeof(t_map));
+	return map;
+}
 void print_split(char **split)
 {
 	int i = 0;
@@ -97,5 +105,6 @@ int main(int ac, char **av)
 		printf("Error\n");
 		return 1;
 	}
+	map = inti_data(map);
 	parsing(map, fd);
 }
