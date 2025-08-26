@@ -1,5 +1,19 @@
 #include "Cub3d.h"
 
+void print_data(t_data *data)
+{
+	printf("NO path %s\n", data->map->no_path);
+	printf("SO path %s\n", data->map->so_path);
+	printf("EA path %s\n", data->map->ea_path);
+	printf("WE path %s\n", data->map->we_path);
+	printf("this is the floor argb %d\n" ,data->map->f_rgb[0]);
+	printf("this is the floor argb %d\n" , data->map->f_rgb[1]);
+	printf("this is the floor argb %d\n" , data->map->f_rgb[2]);
+	printf("this is the cealing argb %d\n" ,data->map->c_rgb[0]);
+	printf("this is the cealing argb %d\n" , data->map->c_rgb[1]);
+	printf("this is the cealing argb %d\n" , data->map->c_rgb[2]);
+}
+
 void add_data(t_data *data, char *identifier, char *value)
 {
     if (!strcmp(identifier, "NO"))
@@ -12,19 +26,19 @@ void add_data(t_data *data, char *identifier, char *value)
         data->map->we_path = ft_strdup(value);
 }
 
-void add_color(t_data *data, char *values, int r, int g, int b)
+void add_color(t_data *data, char *identifier, int r, int g, int b)
 {
-    if (!strcmp(values, "F"))
-	{
-        data->map->f_rgb[0] = ft_atoi(values[1]);
-        data->map->f_rgb[1] = ft_atoi(values[2]);
-        data->map->f_rgb[2] = ft_atoi(values[3]);
+    if (!strcmp(identifier, "F"))
+    {
+        data->map->f_rgb[0] = r;
+        data->map->f_rgb[1] = g;
+        data->map->f_rgb[2] = b;
     }
-	else if (!strcmp(values, "C"))
-	{
-        data->map->c_rgb[0] = ft_atoi(values[1]);
-        data->map->c_rgb[1] = ft_atoi(values[2]);
-        data->map->c_rgb[2] = ft_atoi(values[3]);
+    else if (!strcmp(identifier, "C"))
+    {
+        data->map->c_rgb[0] = r;
+        data->map->c_rgb[1] = g;
+        data->map->c_rgb[2] = b;
     }
 }
 
@@ -75,11 +89,11 @@ static int	count_words(char const *str, char c, char a)
 
 void parse_side(t_data *data, char *identifier, char *path, int count)
 {
-    if (count != 2)
-        error("Invalid number of arguments for texture");
+    // if (count != 2)
+    //     error("Invalid number of arguments for texture");
     int len = strlen(path);
-    if (len < 4 || strcmp(path + len - 4, ".xpm"))
-        error("Invalid texture file format");
+    // if (len < 4 || strcmp(path + len - 4, ".xpm"))
+    //     error("Invalid texture file format");
     add_data(data, identifier, path);
 }
 
@@ -90,16 +104,15 @@ void parse_fc(t_data *data, char *identifier, char **values, int count)
     int r = ft_atoi(values[1]);
     int g = ft_atoi(values[2]);
     int b = ft_atoi(values[3]);
-    if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
-        error("Invalid color values");
+    // if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+    //     error("Invalid color values");
     add_color(data, identifier, r, g, b);
 }
 
-void parsing(t_map *map, int fd)
+void parsing(t_map *map, int fd, t_data *data)
 {
 	char **work;
 	char *line;
-	t_data	*data;
 	int i =0;
 	int count = 0;
 
@@ -111,23 +124,23 @@ void parsing(t_map *map, int fd)
 		work = ft_split(line, count);
 		print_split(work);
         if (strcmp(work[0], "NO") == 0)
-            parse_side(&data, work[0], work[1], count);
+            parse_side(data, work[0], work[1], count);
         else if (strcmp(work[0], "SO") == 0)
-            parse_side(&data, work[0], work[1], count);
+            parse_side(data, work[0], work[1], count);
         else if (strcmp(work[0], "EA") == 0)
-            parse_side(&data, work[0], work[1], count);
+            parse_side(data, work[0], work[1], count);
         else if (strcmp(work[0], "WE") == 0)
-            parse_side(&data, work[0], work[1], count);
+            parse_side(data, work[0], work[1], count);
         else if (strcmp(work[0], "F") == 0)
-            parse_fc(&data, work[0], work, count);
+            parse_fc(data, work[0], work, count);
         else if (strcmp(work[0], "C") == 0)
-            parse_fc(&data, work[0], work, count);
+            parse_fc(data, work[0], work, count);
 		// else if(is_map(line))// to do
 		// 	parsing_map(line , map);// to do
 		// else (isspace(line))
 		// ;
-		else
-			error("Input Mangoli"); // hna ma tnsax aykon leak d line w map freehom mnba3d
+		// else
+		// 	error("Input Mangoli"); // hna ma tnsax aykon leak d line w map freehom mnba3d
 		free(line);
 	}
 	close(fd);
@@ -136,8 +149,9 @@ void parsing(t_map *map, int fd)
 int main(int ac, char **av)
 {
 	t_map	*map;
-	t_data	data;
+	t_data	*data;
 
+	data = malloc(sizeof(t_data));
 	if (ac != 2)
 		error("NOT a vlaid argumment");
 	int len = strlen(av[1]);
@@ -145,9 +159,10 @@ int main(int ac, char **av)
 	if (len < 4 || strcmp(av[1] + len - 4, ".cub") || fd == -1)
 		error("Error");
 	map = inti_data(map);
-    parsing(map, fd);
-    data.map = map;
-    init_mlx(&data);    
-    mlx_loop_hook(data.mlx, &loop_hook, &data);    
-    mlx_loop(data.mlx);
+	data->map = map; // Add this line
+	parsing(map, fd, data);
+	print_data(data);
+    // init_mlx(&data);    
+    // mlx_loop_hook(data.mlx, &loop_hook, &data);    
+    // mlx_loop(data.mlx);
 }
