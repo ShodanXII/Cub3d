@@ -45,8 +45,9 @@ static int	count_words(char const *str, char c, char a)
 	return (count);
 }
 
-void parse_side(char *side, int count)
+void parse_side(char *side, int count, int *a)
 {
+	*a += 1;
 	if (count != 2)
 		error("bzzf args\n");
 	int len = strlen(side);
@@ -54,8 +55,9 @@ void parse_side(char *side, int count)
 		error("no_pic\n");
 }
 
-void parse_fc(char **av, int count)
+void parse_fc(char **av, int count, int *a)
 {
+	*a += 1;
 	if (count != 4)
 		error("bzzf args\n");
 	int r = ft_atoi(av[1]);
@@ -65,34 +67,44 @@ void parse_fc(char **av, int count)
 		error("no_color");
 }
 
+void parse_map(char **map)
+{
+	map = malloc(sizeof(char *) )
+}
+
 void parsing(t_map *map, int fd)
 {
 	char **work;
 	char *line;
-	int i =0;
+	int i = 0;
 	int count = 0;
+	int a = 0;
 
 	while((line = get_next_line(fd)))
 	{
 		if (line[0] == '\n')
 			continue;
 		count = count_words(line, 32, ',');
-		work = ft_split(line, count);
-		print_split(work);
-		if(strcmp(work[0], "NO") == 0)
-			parse_side(work[1], count);
+		printf("a = %d\n", a);
+		if (a != 6){
+			work = ft_split(line, count);
+			print_split(work);
+		}
+		if(a == 6)
+			parse_map(map->map);
+		else if(strcmp(work[0], "NO") == 0)
+			parse_side(work[1], count, &a);
 		else if(strcmp(work[0], "SO") == 0)
-			parse_side(work[1], count);
+			parse_side(work[1], count, &a);
 		else if(strcmp(work[0], "EA") == 0)
-			parse_side(work[1], count);
+			parse_side(work[1], count, &a);
 		else if(strcmp(work[0], "WE") == 0)
-			parse_side(work[1], count);
+			parse_side(work[1], count, &a);
 		else if(strcmp(work[0], "F") == 0)
-			parse_fc(work, count);
+			parse_fc(work, count, &a);
 		else if(strcmp(work[0], "C") == 0)
-			parse_fc(work, count);
-		// else if(is_map(line))// to do
-		// 	parsing_map(line , map);// to do
+			parse_fc(work, count, &a);
+			// parse_map(line , map);
 		// else (isspace(line))
 		// ;
 		else
@@ -122,7 +134,7 @@ int main(int ac, char **av)
 	map = inti_data(map);
     parsing(map, fd);
     data.map = map;
-    init_mlx(&data);    
-    mlx_loop_hook(data.mlx, &loop_hook, &data);    
-    mlx_loop(data.mlx);
+    // init_mlx(&data);    
+    // mlx_loop_hook(data.mlx, &loop_hook, &data);    
+    // mlx_loop(data.mlx);
 }

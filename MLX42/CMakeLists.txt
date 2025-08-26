@@ -5,7 +5,7 @@
 
 # CMake specifications
 # -----------------------------------------------------------------------------
-cmake_minimum_required (VERSION 3.16.0)
+_minimum_required (VERSION 3.16.0)
 project(mlx42 VERSION 2.4.1)
 message(STATUS "MLX42 @ ${CMAKE_PROJECT_VERSION}")
 
