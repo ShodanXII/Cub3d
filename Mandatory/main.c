@@ -108,17 +108,11 @@ int main(int ac, char **av)
 	t_data	data;
 
 	if (ac != 2)
-	{
-		printf("Error\n");
-		return 1;
-	}
+		error("NOT a vlaid argumment");
 	int len = strlen(av[1]);
 	int fd = open(av[1], O_RDONLY);
 	if (len < 4 || strcmp(av[1] + len - 4, ".cub") || fd == -1)
-	{
-		printf("Error\n");
-		return 1;
-	}
+		error("Error");
 	map = inti_data(map);
     parsing(map, fd);
     data.map = map;
