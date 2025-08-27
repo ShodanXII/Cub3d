@@ -6,7 +6,7 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:20:43 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/08/22 16:23:57 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/08/27 15:10:55 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 typedef struct s_data	t_data;
 typedef struct s_player	t_player;
 typedef struct s_map	t_map;
-#define WIDTH	800
-#define HIGHT	800
+# define WIDTH	800
+# define HIGHT	800
 
 struct s_map
 {
@@ -47,27 +47,27 @@ struct s_map
 
 struct s_player
 {
-    double pos_x;
-    double pos_y;
-    double dir_x;
-    double dir_y;
-    double plane_x;
-    double plane_y;
-    double move_speed;
-    double rot_speed;
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+	double	move_speed;
+	double	rot_speed;
 };
 
 struct s_data
 {
 	mlx_image_t	*img;
 	t_map		*map;
-	mlx_t	*mlx;
+	mlx_t		*mlx;
 };
 
 void	error(char *st);
-void parsing(t_map *map, int fd, t_data *data);
-void init_mlx(t_data *data);
-void temp_render(t_data *data);
-void loop_hook(void *param);
+int	parsing(t_map *map, int fd, t_data *data);
+void	init_mlx(t_data *data);
+void	temp_render(t_data *data);
+void	loop_hook(void *param);
 
 #endif

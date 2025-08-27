@@ -17,25 +17,45 @@ void print_data(t_data *data)
 void add_data(t_data *data, char *identifier, char *value)
 {
     if (!strcmp(identifier, "NO"))
+	{
+		if (data->map->no_path)
+			error("dup_no");
         data->map->no_path = ft_strdup(value);
+	}
     else if (!strcmp(identifier, "SO"))
+	{
+		if (data->map->so_path)
+			error("dup_so");
         data->map->so_path = ft_strdup(value);
+	}
     else if (!strcmp(identifier, "EA"))
+	{
+		if (data->map->ea_path)
+			error("dup_ea");
         data->map->ea_path = ft_strdup(value);
+	}
     else if (!strcmp(identifier, "WE"))
+	{
+		if (data->map->we_path)
+			error("dup_we");
         data->map->we_path = ft_strdup(value);
+	}
 }
 
 void add_color(t_data *data, char *identifier, int r, int g, int b)
 {
     if (!strcmp(identifier, "F"))
     {
+		if (data->map->f_rgb[0])
+			error("dup_f");
         data->map->f_rgb[0] = r;
         data->map->f_rgb[1] = g;
         data->map->f_rgb[2] = b;
     }
     else if (!strcmp(identifier, "C"))
     {
+		if (data->map->c_rgb[0])
+			error("dup_c");
         data->map->c_rgb[0] = r;
         data->map->c_rgb[1] = g;
         data->map->c_rgb[2] = b;
@@ -93,7 +113,7 @@ void parse_side(t_data *data, char **work, int count, int *a)
     if (count != 2)
         error("Invalid number of arguments for texture");
     int len = strlen(work[1]);
-    if (len < 4 || strcmp(work[1] + len - 4, ".xpm"))
+    if (len < 5 || strcmp(work[1] + len - 5, ".xpm\n"))
         error("Invalid texture file format");
     add_data(data, work[0], work[1]);
 }
@@ -111,12 +131,22 @@ void parse_fc(t_data *data, char **values, int count, int *a)
     add_color(data, values[0], r, g, b);
 }
 
-void parse_map(char **map)
+void store_map(t_map *map, int fd)
 {
-	map = malloc(sizeof(char *) )
+	
+	char *line;
+	while ((line = get_next_line(fd)))
+	{
+		map
+	}
 }
 
-void parsing(t_map *map, int fd, t_data *data)
+void parse_map(t_map *map, int fd)
+{
+	store_map(map);
+}
+
+int parsing(t_map *map, int fd, t_data *data)
 {
 	char **work;
 	char *line;
@@ -129,10 +159,14 @@ void parsing(t_map *map, int fd, t_data *data)
 		if (line[0] == '\n')
 			continue;
 		count = count_words(line, 32, ',');
+		printf("a = %d\n", a);
+		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
+			i++;
+		if (!line[i])	
+			continue;
 		if (a != 6){
 			work = ft_split(line, count);
 			print_split(work);
-		}
         if (strcmp(work[0], "NO") == 0)
             parse_side(data, work, count, &a);
         else if (strcmp(work[0], "SO") == 0)
@@ -145,17 +179,15 @@ void parsing(t_map *map, int fd, t_data *data)
             parse_fc(data, work, count, &a);
         else if (strcmp(work[0], "C") == 0)
             parse_fc(data, work, count, &a);
-		// else if(is_map(line))// to do
-		// 	parsing_map(line , map);// to do
-		parse_map(map->map);
-			// parse_map(line , map);
-		// else (isspace(line))
-		// ;
-		// else
-		// 	error("Input Mangoli"); // hna ma tnsax aykon leak d line w map freehom mnba3d
+		else
+			error("Input Mangoli");
+		}
+		else if (a == 6)
+			return 1;
 		free(line);
 	}
-	close(fd);
+	// close(fd);
+	return 0;
 }
 
 int main(int ac, char **av)
@@ -171,8 +203,9 @@ int main(int ac, char **av)
 	if (len < 4 || strcmp(av[1] + len - 4, ".cub") || fd == -1)
 		error("Error");
 	map = inti_data(map);
-	data->map = map; // Add this line
-	parsing(map, fd, data);
+	data->map = map;
+	if (parsing(map, fd, data))
+		parse_map(map, fd);
 	print_data(data);
     // init_mlx(&data);    
     // mlx_loop_hook(data.mlx, &loop_hook, &data);    
