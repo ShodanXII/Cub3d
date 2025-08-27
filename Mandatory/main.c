@@ -129,8 +129,10 @@ void parsing(t_map *map, int fd, t_data *data)
 		if (line[0] == '\n')
 			continue;
 		count = count_words(line, 32, ',');
-		work = ft_split(line, count);
-		print_split(work);
+		if (a != 6){
+			work = ft_split(line, count);
+			print_split(work);
+		}
         if (strcmp(work[0], "NO") == 0)
             parse_side(data, work, count, &a);
         else if (strcmp(work[0], "SO") == 0)
@@ -145,25 +147,7 @@ void parsing(t_map *map, int fd, t_data *data)
             parse_fc(data, work, count, &a);
 		// else if(is_map(line))// to do
 		// 	parsing_map(line , map);// to do
-		printf("a = %d\n", a);
-		if (a != 6){
-			work = ft_split(line, count);
-			print_split(work);
-		}
-		if(a == 6)
-			parse_map(map->map);
-		else if(strcmp(work[0], "NO") == 0)
-			parse_side(work[1], count, &a);
-		else if(strcmp(work[0], "SO") == 0)
-			parse_side(work[1], count, &a);
-		else if(strcmp(work[0], "EA") == 0)
-			parse_side(work[1], count, &a);
-		else if(strcmp(work[0], "WE") == 0)
-			parse_side(work[1], count, &a);
-		else if(strcmp(work[0], "F") == 0)
-			parse_fc(work, count, &a);
-		else if(strcmp(work[0], "C") == 0)
-			parse_fc(work, count, &a);
+		parse_map(map->map);
 			// parse_map(line , map);
 		// else (isspace(line))
 		// ;
