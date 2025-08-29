@@ -133,24 +133,33 @@ void parse_fc(t_data *data, char **values, int count, int *a)
 
 void store_map(t_map *map, int fd)
 {
-	
 	char *line;
+	int i = 0;
+	char **maps;
 	while ((line = get_next_line(fd)))
 	{
-		map
+		maps = realloc();
+		maps[i] = ft_strdup(line);
+		i++;
+	}
+	i = 0;
+	while (maps[i])
+	{
+		printf("maps[%d] = %s\n", i, maps[i]);
+		i++;
 	}
 }
 
 void parse_map(t_map *map, int fd)
 {
-	store_map(map);
+	store_map(map, fd);
 }
 
 int parsing(t_map *map, int fd, t_data *data)
 {
 	char **work;
 	char *line;
-	int i = 0;
+	int i;
 	int count = 0;
 	int a = 0;
 
@@ -160,6 +169,7 @@ int parsing(t_map *map, int fd, t_data *data)
 			continue;
 		count = count_words(line, 32, ',');
 		printf("a = %d\n", a);
+		i = 0;
 		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
 			i++;
 		if (!line[i])	
