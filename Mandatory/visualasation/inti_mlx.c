@@ -12,6 +12,27 @@
 
 #include "../Cub3d.h"
 
+void init_data(t_data *data)
+{
+	data->map->player_x = PLAYER_X;
+	data->map->player_y = PLAYER_Y;
+}
+
+void player(t_data *data)
+{
+    if (mlx_is_key_down(data->mlx, MLX_KEY_W))
+        data->map->player_y -= 1;
+    if (mlx_is_key_down(data->mlx, MLX_KEY_S))
+        data->map->player_y += 1;
+    if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+        data->map->player_x -= 1;
+    if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+        data->map->player_x += 1;
+    if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
+        mlx_close_window(data->mlx);
+}
+
+
 void	init_mlx(t_data *data)
 {
 	data->mlx = mlx_init(WIDTH, HIGHT, "Cub3D", false);
@@ -53,5 +74,6 @@ void	temp_render(t_data *data)
 void loop_hook(void *param)
 {
     t_data *data = param;
+	player(data);
     temp_render(data);
 }

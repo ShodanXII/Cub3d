@@ -6,7 +6,7 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/08/29 13:40:18 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:20:56 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ void	check_map(char **map)
 			if (map[i][j] == 'N')
 				count++;
 			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'N'
-			&& map[i][j] != 32 && map[i][j] != '\t')
+			&& map[i][j] != 32 && map[i][j] != '\t' && map[i][j] != '\n')
 				error("map mangoli");
 			j++;
 		}
@@ -325,7 +325,7 @@ int main(int ac, char **av)
 	if (parsing(map, fd, data))
 		parse_map(map, fd);
 	print_data(data);
-    // init_mlx(&data);    
-    // mlx_loop_hook(data.mlx, &loop_hook, &data);    
-    // mlx_loop(data.mlx);
+    init_mlx(data);    
+    mlx_loop_hook(data->mlx, &loop_hook, data);    
+    mlx_loop(data->mlx);
 }
