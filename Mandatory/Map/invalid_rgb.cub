@@ -3,7 +3,7 @@ SO ./textures/south.xpm
 WE ./textures/west.xpm
 EA ./textures/east.xpm
 
-F 220,100,300   # 300 is invalid ❌
+F 220,100,300
 C 100,100,255
 
 111

@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
+/*   Updated: 2025/08/29 12:59:33 by ouel-afi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Cub3d.h"
-
-
 
 void print_data(t_data *data)
 {
@@ -128,45 +138,97 @@ void parse_fc(t_data *data, char **values, int count, int *a)
     int r = ft_atoi(values[1]);
     int g = ft_atoi(values[2]);
     int b = ft_atoi(values[3]);
-    if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255)
+    if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
         error("Invalid color values");
     add_color(data, values[0], r, g, b);
 }
 
-void store_map(t_map *map, int fd)
+int store_map(t_map *map, int fd)
 {
-	
-	// char *line;
-	// while ((line = get_next_line(fd)))
-	// {
-	// 	map
-	// }
+	char *line;
+	int i = 0;
+	char **tmp;
+
+	map->map = NULL;
+	while((line = get_next_line(fd)))
+	{
+		if (line[0] == '\n')
+			continue;
+		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
+			i++;
+		if (!line[i])	
+			continue;
+		tmp = realloc(map->map, sizeof(char *) * (i + 2));
+		if (!tmp)
+			error("realloc kharya");
+		map->map = tmp;
+		map->map[i] = ft_strdup(line);
+		free(line);
+		i++;
+		map->map[i] = NULL;
+	}
+	return i;
+}
+
+void valid_map(char **map, int count)
+{
+	int i = 0;
+	int j;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == '0' || map[i][j] == 'N')
+			{
+				if (i == 0 || i == count - 1 || map[i][j - 1] == '\0' || map[i][j + 1] == '\0' || map[i - 1][j] == '\0' || map[i + 1][j] == '\0')
+					error("map khari.");
+				if ((map[i][j - 1] != '0' && map[i][j - 1] != '1' && map[i][j - 1] != 'N') || (map[i][j + 1] != '0' && map[i][j + 1] != '1' && map[i][j + 1] != 'N') || (map[i - 1][j] != '0' && map[i - 1][j] != '1' && map[i - 1][j] != 'N') || (map[i + 1][j] != '0' && map[i + 1][j] != '1' && map[i + 1][j] != 'N'))
+					error("map_khari");
+			}
+			j++;
+		}
+		i++;
+	}	
+}
+
+void check_map(char **map)
+{
+    int i = 0;
+	int j;
+	int count = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'N')
+				count++;
+			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'N' && map[i][j] != 32 && map[i][j] != '\t')
+				error("map mangoli");
+			j++;
+		}
+		i++;
+	}
+	if (count != 1)
+		error("no_player");
 }
 
 void parse_map(t_map *map, int fd)
 {
-	// store_map(map);
+	int count = store_map(map, fd);
+	for(int i =0; map->map[i];i++)
+		printf("map[%d] = %s\n", i, map->map[i]);
+	check_map(map->map);
+	valid_map(map->map, count);
 }
 
-int is_map(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i] && (str[i] == ' ' || str[i] == '\t'))
-        i++;
-    if (str[i] && (str[i] == '0' || str[i] == '1' || 
-                  str[i] == 'N' || str[i] == 'S' || 
-                  str[i] == 'E' || str[i] == 'W'))
-        return (1);
-    return (0);
-}
 
 int parsing(t_map *map, int fd, t_data *data)
 {
 	char **work;
 	char *line;
-	int i = 0;
+	int i;
 	int count = 0;
 	int a = 0;
 
@@ -175,7 +237,7 @@ int parsing(t_map *map, int fd, t_data *data)
 		if (line[0] == '\n')
 			continue;
 		count = count_words(line, 32, ',');
-		printf("a = %d\n", a);
+		i = 0;
 		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
 			i++;
 		if (!line[i])	
@@ -195,11 +257,10 @@ int parsing(t_map *map, int fd, t_data *data)
             parse_fc(data, work, count, &a);
         else if (strcmp(work[0], "C") == 0)
             parse_fc(data, work, count, &a);
-		else if(!is_map(work[0]))
-			// parse_map();
-			error("Input Mangoligit ");
+		else
+			error("Input Mangoli");
 		}
-		else if (a == 6)
+		if (a == 6)
 			return 1;
 		free(line);
 	}
