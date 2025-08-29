@@ -6,7 +6,7 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/08/29 11:40:01 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/08/29 12:59:33 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void parse_fc(t_data *data, char **values, int count, int *a)
     int r = ft_atoi(values[1]);
     int g = ft_atoi(values[2]);
     int b = ft_atoi(values[3]);
-    if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255)
+    if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
         error("Invalid color values");
     add_color(data, values[0], r, g, b);
 }
@@ -179,7 +179,7 @@ void valid_map(char **map, int count)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == '0')
+			if (map[i][j] == '0' || map[i][j] == 'N')
 			{
 				if (i == 0 || i == count - 1 || map[i][j - 1] == '\0' || map[i][j + 1] == '\0' || map[i - 1][j] == '\0' || map[i + 1][j] == '\0')
 					error("map khari.");
