@@ -136,16 +136,16 @@ void parse_fc(t_data *data, char **values, int count, int *a)
 void store_map(t_map *map, int fd)
 {
 	
-	char *line;
-	while ((line = get_next_line(fd)))
-	{
-		map
-	}
+	// char *line;
+	// while ((line = get_next_line(fd)))
+	// {
+	// 	map
+	// }
 }
 
 void parse_map(t_map *map, int fd)
 {
-	store_map(map);
+	// store_map(map);
 }
 
 int is_map(char *str)
@@ -196,8 +196,8 @@ int parsing(t_map *map, int fd, t_data *data)
         else if (strcmp(work[0], "C") == 0)
             parse_fc(data, work, count, &a);
 		else if(!is_map(work[0]))
-			parse_map();
-			error("Input Mangoli");
+			// parse_map();
+			error("Input Mangoligit ");
 		}
 		else if (a == 6)
 			return 1;
@@ -224,7 +224,7 @@ int main(int ac, char **av)
 	if (parsing(map, fd, data))
 		parse_map(map, fd);
 	print_data(data);
-    // init_mlx(&data);    
-    // mlx_loop_hook(data.mlx, &loop_hook, &data);    
-    // mlx_loop(data.mlx);
+    init_mlx(&data);    
+    mlx_loop_hook(data->mlx, &loop_hook, &data);    
+    mlx_loop(data->mlx);
 }

@@ -23,11 +23,15 @@
 # include <fcntl.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 
+
 typedef struct s_data	t_data;
 typedef struct s_player	t_player;
 typedef struct s_map	t_map;
 # define WIDTH	800
 # define HIGHT	800
+#define PLAYER_X 80
+#define PLAYER_Y 80
+
 
 struct s_map
 {
