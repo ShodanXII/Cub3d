@@ -137,17 +137,30 @@ void store_map(t_map *map, int fd)
 {
 	char *line;
 	int i = 0;
-	char **maps;
-	while ((line = get_next_line(fd)))
+	char **tmp;
+
+	map->map = NULL;
+	while((line = get_next_line(fd)))
 	{
-		maps = realloc();
-		maps[i] = ft_strdup(line);
+		if (line[0] == '\n')
+			continue;
+		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
+			i++;
+		if (!line[i])	
+			continue;
+		tmp = realloc(map->map, sizeof(char *) * (i + 2));
+		if (!tmp)
+			error("realloc kharya");
+		map->map = tmp;
+		map->map[i] = ft_strdup(line);
+		free(line);
 		i++;
+		map->map[i] = NULL;
 	}
 	i = 0;
-	while (maps[i])
+	while (map->map[i])
 	{
-		printf("maps[%d] = %s\n", i, maps[i]);
+		printf("map [%d] = %s\n", i, map->map[i]);
 		i++;
 	}
 }
@@ -183,7 +196,6 @@ int parsing(t_map *map, int fd, t_data *data)
 		if (line[0] == '\n')
 			continue;
 		count = count_words(line, 32, ',');
-		printf("a = %d\n", a);
 		i = 0;
 		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
 			i++;
@@ -204,11 +216,10 @@ int parsing(t_map *map, int fd, t_data *data)
             parse_fc(data, work, count, &a);
         else if (strcmp(work[0], "C") == 0)
             parse_fc(data, work, count, &a);
-		else if(!is_map(work[0]))
-			parse_map();
+		else
 			error("Input Mangoli");
 		}
-		else if (a == 6)
+		if (a == 6)
 			return 1;
 		free(line);
 	}
