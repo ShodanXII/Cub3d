@@ -1,5 +1,7 @@
 #include "Cub3d.h"
 
+
+
 void print_data(t_data *data)
 {
 	printf("NO path %s\n", data->map->no_path);
@@ -126,7 +128,7 @@ void parse_fc(t_data *data, char **values, int count, int *a)
     int r = ft_atoi(values[1]);
     int g = ft_atoi(values[2]);
     int b = ft_atoi(values[3]);
-    if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+    if (r < 0 || g < 0 || b < 0 || r > 255 || g > 255)
         error("Invalid color values");
     add_color(data, values[0], r, g, b);
 }
@@ -153,6 +155,20 @@ void store_map(t_map *map, int fd)
 void parse_map(t_map *map, int fd)
 {
 	store_map(map, fd);
+}
+
+int is_map(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+        i++;
+    if (str[i] && (str[i] == '0' || str[i] == '1' || 
+                  str[i] == 'N' || str[i] == 'S' || 
+                  str[i] == 'E' || str[i] == 'W'))
+        return (1);
+    return (0);
 }
 
 int parsing(t_map *map, int fd, t_data *data)
@@ -189,7 +205,8 @@ int parsing(t_map *map, int fd, t_data *data)
             parse_fc(data, work, count, &a);
         else if (strcmp(work[0], "C") == 0)
             parse_fc(data, work, count, &a);
-		else
+		else if(!is_map(work[0]))
+			parse_map();
 			error("Input Mangoli");
 		}
 		else if (a == 6)
