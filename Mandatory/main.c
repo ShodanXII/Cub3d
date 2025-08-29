@@ -145,29 +145,37 @@ void parse_fc(t_data *data, char **values, int count, int *a)
 
 int store_map(t_map *map, int fd)
 {
-	char *line;
-	int i = 0;
-	char **tmp;
+    char *line;
+    int i = 0;
+    int j; // New variable for whitespace checking
+    char **tmp;
 
-	map->map = NULL;
-	while((line = get_next_line(fd)))
-	{
-		if (line[0] == '\n')
-			continue;
-		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
-			i++;
-		if (!line[i])	
-			continue;
-		tmp = realloc(map->map, sizeof(char *) * (i + 2));
-		if (!tmp)
-			error("realloc kharya");
-		map->map = tmp;
-		map->map[i] = ft_strdup(line);
-		free(line);
-		i++;
-		map->map[i] = NULL;
-	}
-	return i;
+    map->map = NULL;
+    while((line = get_next_line(fd)))
+    {
+        if (line[0] == '\n')
+        {
+            free(line);
+            continue;
+        }
+        j = 0;
+        while (line[j] == 32 || (line[j] >= 9 && line[j] <= 13))
+            j++;
+        if (!line[j])
+        {
+            free(line);
+            continue;
+        }
+        tmp = realloc(map->map, sizeof(char *) * (i + 2)); // Use i as line count
+        if (!tmp)
+            error("realloc kharya");
+        map->map = tmp;
+        map->map[i] = ft_strdup(line);
+        free(line);
+        i++;
+        map->map[i] = NULL;
+    }
+    return i;
 }
 
 void valid_map(char **map, int count)
@@ -195,23 +203,27 @@ void valid_map(char **map, int count)
 void check_map(char **map)
 {
     int i = 0;
-	int j;
-	int count = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (map[i][j] == 'N')
-				count++;
-			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'N' && map[i][j] != 32 && map[i][j] != '\t')
-				error("map mangoli");
-			j++;
-		}
-		i++;
-	}
-	if (count != 1)
-		error("no_player");
+    int j;
+    int count = 0;
+    while (map[i])
+    {
+        j = 0;
+        while (map[i][j])
+        {
+            if (map[i][j] == 'N')
+                count++;
+            if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'N' && 
+                map[i][j] != 32 && map[i][j] != '\t' && map[i][j] != '\n')
+            {
+                printf("Invalid char: '%c' (ASCII: %d) at [%d][%d]\n", map[i][j], map[i][j], i, j);
+                error("map mangoli");
+            }
+            j++;
+        }
+        i++;
+    }
+    if (count != 1)
+        error("no_player");
 }
 
 void parse_map(t_map *map, int fd)
@@ -285,7 +297,7 @@ int main(int ac, char **av)
 	if (parsing(map, fd, data))
 		parse_map(map, fd);
 	print_data(data);
-    init_mlx(&data);    
-    mlx_loop_hook(data->mlx, &loop_hook, &data);    
+    init_mlx(data);    
+    mlx_loop_hook(data->mlx, &loop_hook, data);    
     mlx_loop(data->mlx);
 }

@@ -12,7 +12,7 @@
 
 #include "../Cub3d.h"
 
-void inti_data(t_data *data)
+void init_data(t_data *data)
 {
 	data->map->player_x = PLAYER_X;
 	data->map->player_y = PLAYER_Y;
