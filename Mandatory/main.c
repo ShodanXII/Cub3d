@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
+/*   Updated: 2025/08/29 11:40:01 by ouel-afi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Cub3d.h"
-
-
 
 void print_data(t_data *data)
 {
@@ -133,7 +143,7 @@ void parse_fc(t_data *data, char **values, int count, int *a)
     add_color(data, values[0], r, g, b);
 }
 
-void store_map(t_map *map, int fd)
+int store_map(t_map *map, int fd)
 {
 	char *line;
 	int i = 0;
@@ -157,31 +167,62 @@ void store_map(t_map *map, int fd)
 		i++;
 		map->map[i] = NULL;
 	}
-	i = 0;
-	while (map->map[i])
+	return i;
+}
+
+void valid_map(char **map, int count)
+{
+	int i = 0;
+	int j;
+	while (map[i])
 	{
-		printf("map [%d] = %s\n", i, map->map[i]);
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == '0')
+			{
+				if (i == 0 || i == count - 1 || map[i][j - 1] == '\0' || map[i][j + 1] == '\0' || map[i - 1][j] == '\0' || map[i + 1][j] == '\0')
+					error("map khari.");
+				if ((map[i][j - 1] != '0' && map[i][j - 1] != '1' && map[i][j - 1] != 'N') || (map[i][j + 1] != '0' && map[i][j + 1] != '1' && map[i][j + 1] != 'N') || (map[i - 1][j] != '0' && map[i - 1][j] != '1' && map[i - 1][j] != 'N') || (map[i + 1][j] != '0' && map[i + 1][j] != '1' && map[i + 1][j] != 'N'))
+					error("map_khari");
+			}
+			j++;
+		}
+		i++;
+	}	
+}
+
+void check_map(char **map)
+{
+    int i = 0;
+	int j;
+	int count = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'N')
+				count++;
+			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'N' && map[i][j] != 32 && map[i][j] != '\t')
+				error("map mangoli");
+			j++;
+		}
 		i++;
 	}
+	if (count != 1)
+		error("no_player");
 }
 
 void parse_map(t_map *map, int fd)
 {
-	store_map(map, fd);
+	int count = store_map(map, fd);
+	for(int i =0; map->map[i];i++)
+		printf("map[%d] = %s\n", i, map->map[i]);
+	check_map(map->map);
+	valid_map(map->map, count);
 }
 
-int is_map(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i] && (str[i] == ' ' || str[i] == '\t'))
-        i++;
-    if (str[i] && (str[i] == '0' || str[i] == '1' || 
-                  str[i] == 'N'))
-        return (1);
-    return (0);
-}
 
 int parsing(t_map *map, int fd, t_data *data)
 {
