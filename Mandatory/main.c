@@ -6,7 +6,7 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/08/30 11:07:50 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:44:56 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,8 +260,10 @@ void	parse_map(t_map *map, int fd)
 	valid_map(map->map, count);
 }
 
-void	header_map(t_data *data, char **work, char *line, int count, int *a)
+void	header_map(t_data *data, char *line, int count, int *a)
 {
+	char	**work;
+
 	work = ft_split(line, count);
 	print_split(work);
 	if (strcmp(work[0], "NO") == 0)
@@ -282,11 +284,10 @@ void	header_map(t_data *data, char **work, char *line, int count, int *a)
 
 int	parsing(t_map *map, int fd, t_data *data)
 {
-	char **work;
-	char *line;
-	int i;
-	int count = 0;
-	int a = 0;
+	char	*line;
+	int		i;
+	int		count = 0;
+	int		a = 0;
 
 	while((line = get_next_line(fd)))
 	{
@@ -299,7 +300,7 @@ int	parsing(t_map *map, int fd, t_data *data)
 		if (!line[i])	
 			continue;
 		if (a != 6)
-			header_map(data, work, line, count, &a);
+			header_map(data, line, count, &a);
 		if (a == 6)
 			return 1;
 		free(line);
