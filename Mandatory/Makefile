@@ -8,9 +8,7 @@ GNL_DIR = $(SRC_DIR)/get_next_line
 LIBFT_DIR = $(SRC_DIR)/libft
 MLX_DIR = ../MLX42
 
-# Find GLFW path
-GLFW_PATH = $(shell brew --prefix glfw)
-
+# Linux setup - no brew needed
 SRCS = $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/visualasation/inti_mlx.c \
 	   $(GNL_DIR)/get_next_line.c \
@@ -21,10 +19,10 @@ OBJS = $(SRCS:.c=.o)
 LIBFT = $(LIBFT_DIR)/libft.a
 MLX42_LIB = $(MLX_DIR)/build/libmlx42.a
 
-INCLUDES = -I$(MLX_DIR)/include -I$(SRC_DIR) -I$(GLFW_PATH)/include
+INCLUDES = -I$(MLX_DIR)/include -I$(SRC_DIR)
 
-FRAMEWORKS = -framework Cocoa -framework OpenGL -framework IOKit
-LIBS = $(MLX42_LIB) -lglfw -L"$(GLFW_PATH)/lib" -L$(LIBFT_DIR) -lft
+# Linux libraries - no frameworks needed
+LIBS = $(MLX42_LIB) -lglfw $(LIBFT) -ldl -lm
 
 all: $(NAME)
 
@@ -35,7 +33,7 @@ $(LIBFT):
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBS) $(FRAMEWORKS) -o $(NAME)
+	$(CC) $(OBJS) $(LIBS) -o $(NAME)
 
 clean:
 	@rm -f $(OBJS)

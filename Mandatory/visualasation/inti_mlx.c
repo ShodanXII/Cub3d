@@ -21,15 +21,23 @@ void init_data(t_data *data)
 void player(t_data *data)
 {
     if (mlx_is_key_down(data->mlx, MLX_KEY_W))
-        data->map->player_y -= 1;
+        data->map->player_y -= 5;
     if (mlx_is_key_down(data->mlx, MLX_KEY_S))
-        data->map->player_y += 1;
+        data->map->player_y += 5;
     if (mlx_is_key_down(data->mlx, MLX_KEY_A))
-        data->map->player_x -= 1;
+        data->map->player_x -= 5;
     if (mlx_is_key_down(data->mlx, MLX_KEY_D))
-        data->map->player_x += 1;
+        data->map->player_x += 5;
     if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
         mlx_close_window(data->mlx);
+	if (data->map->player_x < 15)
+        data->map->player_x = 15;
+    if (data->map->player_x > WIDTH - 15)
+        data->map->player_x = WIDTH - 15;
+    if (data->map->player_y < 15)
+        data->map->player_y = 15;
+    if (data->map->player_y > HIGHT - 15)
+        data->map->player_y = HIGHT - 15;
 }
 
 
@@ -43,10 +51,40 @@ void	init_mlx(t_data *data)
 		error("Failed to add image to window");
 }
 
+void render_player(t_data *data)
+{
+	int i;
+	int j;
+	int	player_size = 30;
+
+	data->player = malloc(sizeof(t_player));
+	player(data);
+	int player_x = data->map->player_x - player_size/2;
+	int player_y = data->map->player_y - player_size/2;
+
+	i = 0;
+    while (i < player_size)
+    {
+        j = 0;
+        while (j < player_size)
+        {
+            int x = player_x + i;
+            int y = player_y + j;
+            
+            // Make sure we don't draw outside screen bounds
+            if (x >= 0 && x < WIDTH && y >= 0 && y < HIGHT)
+                mlx_put_pixel(data->img, x, y, 0xFF0000FF); // Red color
+            j++;
+        }
+        i++;
+    }
+}
+
 void	temp_render(t_data *data)
 {
 	int	i;
 	int	j;
+	int	player_size;
 
 	i = 0;
 	while (i < WIDTH)
@@ -62,13 +100,7 @@ void	temp_render(t_data *data)
 		}
 		i++;
 	}
-	for (int y = HIGHT/2 - 50; y < HIGHT/2 + 50; y++)
-	{
-		for (int x = WIDTH/2 - 50; x < WIDTH/2 + 50; x++)
-		{
-			mlx_put_pixel(data->img, x, y, 0xFF0000FF);
-		}
-	}
+	render_player(data);
 }
 
 void loop_hook(void *param)

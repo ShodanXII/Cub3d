@@ -47,10 +47,10 @@ struct s_map
 	char	**map;
 	int		map_width;
 	int		map_hight;
-};
+	};
 
-struct s_player
-{
+	struct s_player
+	{
 	double	pos_x;
 	double	pos_y;
 	double	dir_x;
@@ -66,6 +66,7 @@ struct s_data
 	mlx_image_t	*img;
 	t_map		*map;
 	mlx_t		*mlx;
+	t_player	*player;
 };
 
 void	error(char *st);
