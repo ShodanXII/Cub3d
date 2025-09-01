@@ -27,8 +27,8 @@
 typedef struct s_data	t_data;
 typedef struct s_player	t_player;
 typedef struct s_map	t_map;
-# define WIDTH	800
-# define HIGHT	800
+# define WIDTH	1000
+# define HIGHT	1000
 #define PLAYER_X 80
 #define PLAYER_Y 80
 
