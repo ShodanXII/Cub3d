@@ -1,14 +1,13 @@
 NAME = cub3d
 
 CC = cc
-CFLAGS =  -O3
+CFLAGS = -O3
 
 SRC_DIR = .
 GNL_DIR = $(SRC_DIR)/get_next_line
 LIBFT_DIR = $(SRC_DIR)/libft
 MLX_DIR = ../MLX42
 
-# Linux setup - no brew needed
 SRCS = $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/visualasation/inti_mlx.c \
 	   $(GNL_DIR)/get_next_line.c \
@@ -21,8 +20,19 @@ MLX42_LIB = $(MLX_DIR)/build/libmlx42.a
 
 INCLUDES = -I$(MLX_DIR)/include -I$(SRC_DIR)
 
-# Linux libraries - no frameworks needed
-LIBS = $(MLX42_LIB) -lglfw $(LIBFT) -ldl -lm
+# Detect OS
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S), Darwin)
+	GLFW_PATH = /goinfre/$(USER)/homebrew/opt/glfw
+	LIBS = $(MLX42_LIB) $(LIBFT) \
+	       -L$(GLFW_PATH)/lib -lglfw \
+	       -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+else
+	LIBS = $(MLX42_LIB) $(LIBFT) \
+	       -L/usr/lib/x86_64-linux-gnu -lglfw \
+	       -ldl -lm -pthread
+endif
 
 all: $(NAME)
 

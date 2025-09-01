@@ -70,10 +70,8 @@ void render_player(t_data *data)
         {
             int x = player_x + i;
             int y = player_y + j;
-            
-            // Make sure we don't draw outside screen bounds
             if (x >= 0 && x < WIDTH && y >= 0 && y < HIGHT)
-                mlx_put_pixel(data->img, x, y, 0xFF0000FF); // Red color
+                mlx_put_pixel(data->img, x, y, 0xFF0000FF); // Red
             j++;
         }
         i++;
