@@ -12,6 +12,44 @@
 
 #include "../Cub3d.h"
 
+void render_map(t_data *data)
+{
+    int i;
+    int j;
+	int x;
+	int y;
+    int tile_size = 50;
+    
+    char **map = data->map->map;
+    i = 0;
+    while(map[i])
+    {
+        j = 0;
+        while(map[i][j])
+        {
+            if(map[i][j] == '1')
+            {
+				y = 0;
+                while(y < tile_size)
+                {
+					x =0;
+                    while(x < tile_size)
+                    {
+                        int screen_x = j * tile_size + x;
+                        int screen_y = i * tile_size + y;
+                        if (screen_x >= 0 && screen_x < WIDTH && screen_y >= 0 && screen_y < HIGHT)
+                            mlx_put_pixel(data->img, screen_x, screen_y, 0xFFFFFFFF);
+						x++;
+                    }
+					y++;
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+}
+
 void init_data(t_data *data)
 {
 	data->map->player_x = PLAYER_X;
@@ -98,6 +136,7 @@ void	temp_render(t_data *data)
 		}
 		i++;
 	}
+	render_map(data);
 	render_player(data);
 }
 
