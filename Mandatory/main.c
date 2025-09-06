@@ -6,7 +6,7 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/08/30 14:44:56 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/09/06 12:25:54 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,11 +183,17 @@ int	store_map(t_map *map, int fd)
 int	valid_place(char **map, int i, int j)
 {
 	if ((map[i][j - 1] != '0' && map[i][j - 1] != '1'
-		&& map[i][j - 1] != 'N') || (map[i][j + 1] != '0'
-		&& map[i][j + 1] != '1' && map[i][j + 1] != 'N')
+		&& map[i][j - 1] != 'N' && map[i][j - 1] != 'S'
+		&& map[i][j - 1] != 'W' && map[i][j - 1] != 'E')
+		|| (map[i][j + 1] != '0' && map[i][j + 1] != '1'
+		&& map[i][j + 1] != 'N' && map[i][j + 1] != 'S'
+		&& map[i][j + 1] != 'E' && map[i][j + 1] != 'W')
 		|| (map[i - 1][j] != '0' && map[i - 1][j] != '1'
-		&& map[i - 1][j] != 'N') || (map[i + 1][j] != '0'
-		&& map[i + 1][j] != '1' && map[i + 1][j] != 'N'))
+		&& map[i - 1][j] != 'N' && map[i - 1][j] != 'S'
+		&& map[i - 1][j] != 'W' && map[i - 1][j] != 'E')
+		|| (map[i + 1][j] != '0' && map[i + 1][j] != '1'
+		&& map[i + 1][j] != 'N' && map[i + 1][j] != 'S'
+		&& map[i + 1][j] != 'W' && map[i + 1][j] != 'E'))
 		return (1);
 	return (0);
 }
@@ -203,7 +209,7 @@ void	valid_map(char **map, int count)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == '0' || map[i][j] == 'N')
+			if (map[i][j] == '0' || map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'W' || map[i][j] == 'E')
 			{
 				if (i == 0 || i == count - 1 || map[i][j - 1] == '\0'
 				|| map[i][j + 1] == '\0' || map[i - 1][j] == '\0'
@@ -231,9 +237,10 @@ void	check_map(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'N')
+			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' || map[i][j] == 'W')
 				count++;
 			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'N'
+			&& map[i][j] != 'S' && map[i][j] != 'E' && map[i][j] != 'W'
 			&& map[i][j] != 32 && map[i][j] != '\t' && map[i][j] != '\n')
 				error("map mangoli");
 			j++;
