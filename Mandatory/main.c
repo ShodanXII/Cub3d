@@ -6,7 +6,7 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/09/06 12:25:54 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/09/19 12:20:34 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,9 @@ void	valid_map(char **map, int count)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == '0' || map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'W' || map[i][j] == 'E')
+			if (map[i][j] == '0' || map[i][j] == 'N'
+			|| map[i][j] == 'S' || map[i][j] == 'W'
+			|| map[i][j] == 'E')
 			{
 				if (i == 0 || i == count - 1 || map[i][j - 1] == '\0'
 				|| map[i][j + 1] == '\0' || map[i - 1][j] == '\0'
@@ -237,7 +239,8 @@ void	check_map(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' || map[i][j] == 'W')
+			if (map[i][j] == 'N' || map[i][j] == 'S'
+			|| map[i][j] == 'E' || map[i][j] == 'W')
 				count++;
 			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'N'
 			&& map[i][j] != 'S' && map[i][j] != 'E' && map[i][j] != 'W'
@@ -293,39 +296,43 @@ int	parsing(t_map *map, int fd, t_data *data)
 {
 	char	*line;
 	int		i;
-	int		count = 0;
-	int		a = 0;
+	int		count;
+	int		a;
 
-	while((line = get_next_line(fd)))
+	a = 0;
+	count = 0;
+	while ((line = get_next_line(fd)))
 	{
 		if (line[0] == '\n')
-			continue;
+			continue ;
 		count = count_words(line, 32, ',');
 		i = 0;
 		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
 			i++;
-		if (!line[i])	
-			continue;
+		if (!line[i])
+			continue ;
 		if (a != 6)
 			header_map(data, line, count, &a);
 		if (a == 6)
-			return 1;
+			return (1);
 		free(line);
 	}
-	// close(fd);
-	return 0;
+	close(fd);
+	return (0);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_map	*map;
 	t_data	*data;
+	int		len;
+	int		fd;
 
 	data = malloc(sizeof(t_data));
 	if (ac != 2)
 		error("NOT a vlaid argumment");
-	int len = strlen(av[1]);
-	int fd = open(av[1], O_RDONLY);
+	len = strlen(av[1]);
+	fd = open(av[1], O_RDONLY);
 	if (len < 4 || strcmp(av[1] + len - 4, ".cub") || fd == -1)
 		error("Error");
 	map = inti_data(map);
@@ -333,7 +340,7 @@ int main(int ac, char **av)
 	if (parsing(map, fd, data))
 		parse_map(map, fd);
 	print_data(data);
-    init_mlx(data);    
-    mlx_loop_hook(data->mlx, &loop_hook, data);    
-    mlx_loop(data->mlx);
+	init_mlx(data);
+	mlx_loop_hook(data->mlx, &loop_hook, data);
+	mlx_loop(data->mlx);
 }
