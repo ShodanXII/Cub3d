@@ -12,6 +12,38 @@
 
 #include "Cub3d.h"
 
+void	init_player(t_data *data)
+{
+	int	y = 0;
+	while (data->map->map[y])
+	{
+		int	x = 0;
+		while (data->map->map[y][x])
+		{
+			char c = data->map->map[y][x];
+			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+			{
+				data->player->pos_x = x + 0.5;
+				data->player->pos_y = y + 0.5;
+				if (c == 'N')
+					data->player->rot_angle = PI / 2;
+				else if (c == 'S')
+					data->player->rot_angle = 3 * PI / 2;
+				else if (c == 'E')
+					data->player->rot_angle = 0;
+				else if (c == 'W')
+					data->player->rot_angle = PI;
+				data->map->map[y][x] = '0';
+				return;
+			}
+			x++;
+		}
+		y++;
+	}
+	error("no player found");
+}
+
+
 void	print_data(t_data *data)
 {
 	printf("NO path %s\n", data->map->no_path);
@@ -329,6 +361,9 @@ int	main(int ac, char **av)
 	int		fd;
 
 	data = malloc(sizeof(t_data));
+	data->player = malloc(sizeof(t_player)); // ADD THIS LINE
+	if (!data || !data->player)
+    	error("allocation failed");
 	if (ac != 2)
 		error("NOT a vlaid argumment");
 	len = strlen(av[1]);
@@ -340,6 +375,7 @@ int	main(int ac, char **av)
 	if (parsing(map, fd, data))
 		parse_map(map, fd);
 	print_data(data);
+	init_player(data);
 	init_mlx(data);
 	mlx_loop_hook(data->mlx, &loop_hook, data);
 	mlx_loop(data->mlx);

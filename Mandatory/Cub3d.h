@@ -31,6 +31,7 @@ typedef struct s_map	t_map;
 # define HIGHT	1000
 #define PLAYER_X 80
 #define PLAYER_Y 80
+#define PI 3.14159265358979323846
 
 
 struct s_map
@@ -47,10 +48,10 @@ struct s_map
 	char	**map;
 	int		map_width;
 	int		map_hight;
-	};
+};
 
-	struct s_player
-	{
+struct s_player
+{
 	double	pos_x;
 	double	pos_y;
 	double	dir_x;
@@ -59,6 +60,7 @@ struct s_map
 	double	plane_y;
 	double	move_speed;
 	double	rot_speed;
+	double	rot_angle;
 };
 
 struct s_data
@@ -72,6 +74,7 @@ struct s_data
 void	error(char *st);
 int	parsing(t_map *map, int fd, t_data *data);
 void	init_mlx(t_data *data);
+void	init_player(t_data *data);
 void	temp_render(t_data *data);
 void	loop_hook(void *param);
 

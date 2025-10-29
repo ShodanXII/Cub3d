@@ -95,7 +95,6 @@ void render_player(t_data *data)
 	int j;
 	int	player_size = 30;
 
-	data->player = malloc(sizeof(t_player));
 	player(data);
 	int player_x = data->map->player_x - player_size/2;
 	int player_y = data->map->player_y - player_size/2;
