@@ -8,10 +8,13 @@ GNL_DIR = $(SRC_DIR)/get_next_line
 LIBFT_DIR = $(SRC_DIR)/libft
 MLX_DIR = ../MLX42
 
-SRCS = $(SRC_DIR)/main.c \
-	   $(SRC_DIR)/visualasation/inti_mlx.c \
+SRCS = $(SRC_DIR)/testo.c \
 	   $(GNL_DIR)/get_next_line.c \
-	   $(GNL_DIR)/get_next_line_utils.c
+	   $(GNL_DIR)/get_next_line_utils.c \
+	   visualasation/inti_mlx.c \
+	   ./raycating.c \
+	   ./texture.c
+
 
 OBJS = $(SRCS:.c=.o)
 
@@ -24,7 +27,7 @@ INCLUDES = -I$(MLX_DIR)/include -I$(SRC_DIR)
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S), Darwin)
-	GLFW_PATH = /Users/achat/.brew/opt/glfw
+	GLFW_PATH = /goinfre/ouel-afi/homebrew/opt/glfw
 	LIBS = $(MLX42_LIB) $(LIBFT) \
 	       -L$(GLFW_PATH)/lib -lglfw \
 	       -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
