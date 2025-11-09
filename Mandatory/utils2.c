@@ -6,49 +6,65 @@
 /*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 22:42:27 by achat             #+#    #+#             */
-/*   Updated: 2025/11/09 22:42:38 by achat            ###   ########.fr       */
+/*   Updated: 2025/11/09 23:55:22 by achat            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cub3d.h"
 
-int	is_valid_char(char c)
+static int	is_empty_line(char *line)
 {
-	return (c == '0' || c == '1' || c == 'N' || c == 'S'
-		|| c == 'W' || c == 'E');
+	int	i;
+
+	i = 0;
+	if (!line || !line[i])
+		return (1);
+	while (line[i])
+	{
+		if (line[i] != ' ' && line[i] != '\t' && 
+				line[i] != '\n' && line[i] != '\r')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-int	valid_place(char **map, int i, int j)
+static int	is_map_line(char *line)
 {
-	if (!is_valid_char(map[i][j - 1]) || !is_valid_char(map[i][j + 1])
-		|| !is_valid_char(map[i - 1][j]) || !is_valid_char(map[i + 1][j]))
-		return (1);
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '1' || line[i] == '0' || 
+			line[i] == 'N' || line[i] == 'S' || 
+			line[i] == 'E' || line[i] == 'W')
+			return (1);
+		i++;
+	}
 	return (0);
 }
 
-void	valid_map(char **map, int count)
+static void	check_map_continuity(char **map)
 {
 	int	i;
-	int	j;
+	int	map_started;
+	int	map_ended;
 
 	i = 0;
+	map_started = 0;
+	map_ended = 0;
 	while (map[i])
 	{
-		j = 0;
-		while (map[i][j])
+		if (is_map_line(map[i]))
 		{
-			if (map[i][j] == '0' || map[i][j] == 'N'
-				|| map[i][j] == 'S' || map[i][j] == 'W'
-				|| map[i][j] == 'E')
-			{
-				if (i == 0 || i == count - 1 || map[i][j - 1] == '\0'
-					|| map[i][j + 1] == '\0' || map[i - 1][j] == '\0'
-					|| map[i + 1][j] == '\0')
-					error("Map not properly enclosed");
-				if (valid_place(map, i, j))
-					error("Invalid map boundaries");
-			}
-			j++;
+			if (map_ended)
+				error("Invalid map: empty line within map");
+			map_started = 1;
+		}
+		else if (map_started && is_empty_line(map[i]))
+		{
+			map_ended = 1;
 		}
 		i++;
 	}
@@ -80,6 +96,7 @@ void	check_map(char **map)
 	}
 	if (player_count != 1)
 		error("Map must have exactly one player");
+	check_map_continuity(map);
 }
 
 void	parse_map(t_map *map, int fd)
