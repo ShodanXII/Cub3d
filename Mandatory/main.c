@@ -1,20 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   testo.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/09 12:04:03 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/11/09 21:39:47 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cub3d.h"
-
-/* ==========================
-   Original functions <25 lines
-   ========================== */
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
@@ -322,10 +318,6 @@ void	header_map(t_data *data, char *line, int count, int *parsed_count)
 	free_split(work);
 }
 
-/* ==========================
-   Split helpers for parsing()
-   ========================== */
-
 static void	skip_whitespace(char **line, int *i)
 {
 	while ((*line)[*i] == 32 || ((*line)[*i] >= 9 && (*line)[*i] <= 13))
@@ -374,10 +366,6 @@ int	parsing(t_map *map, int fd, t_data *data)
 	return (0);
 }
 
-/* ==========================
-   Split helpers for init_player()
-   ========================== */
-
 static void	set_player_rotation(t_player *player, char c)
 {
 	if (c == 'S')
@@ -417,10 +405,6 @@ void	init_player(t_data *data)
 	}
 	error("No player found in map");
 }
-
-/* ==========================
-   Split helpers for main()
-   ========================== */
 
 static void	validate_args(int ac, char **av, int *fd)
 {

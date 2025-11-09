@@ -8,7 +8,7 @@ GNL_DIR = $(SRC_DIR)/get_next_line
 LIBFT_DIR = $(SRC_DIR)/libft
 MLX_DIR = ../MLX42
 
-SRCS = $(SRC_DIR)/testo.c \
+SRCS = $(SRC_DIR)/main.c \
 	   $(GNL_DIR)/get_next_line.c \
 	   $(GNL_DIR)/get_next_line_utils.c \
 	   visualasation/inti_mlx.c \
