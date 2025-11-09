@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   textture.c                                         :+:      :+:    :+:   */
+/*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 11:00:00 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/07 12:09:40 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/11/09 21:06:52 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	load_textures(t_data *data)
 	char	*ea_path;
 	char	*we_path;
 
-	no_path = ft_strtrim(data->map->no_path, "\n\r");
-	so_path = ft_strtrim(data->map->so_path, "\n\r");
+	no_path = ft_strtrim(data->map->so_path, "\n\r");
+	so_path = ft_strtrim(data->map->no_path, "\n\r");
 	ea_path = ft_strtrim(data->map->ea_path, "\n\r");
 	we_path = ft_strtrim(data->map->we_path, "\n\r");
 	data->textures->north = mlx_load_png(no_path);

@@ -27,7 +27,7 @@ INCLUDES = -I$(MLX_DIR)/include -I$(SRC_DIR)
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S), Darwin)
-	GLFW_PATH = /Users/achat/.brew/opt/glfw
+	GLFW_PATH = /goinfre/ouel-afi/homebrew/opt/glfw
 	LIBS = $(MLX42_LIB) $(LIBFT) \
 	       -L$(GLFW_PATH)/lib -lglfw \
 	       -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
