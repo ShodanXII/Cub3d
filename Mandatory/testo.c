@@ -52,18 +52,6 @@ void	free_split(char **split)
 	free(split);
 }
 
-void	print_data(t_data *data)
-{
-	printf("NO path %s\n", data->map->no_path);
-	printf("SO path %s\n", data->map->so_path);
-	printf("EA path %s\n", data->map->ea_path);
-	printf("WE path %s\n", data->map->we_path);
-	printf("Floor RGB: %d, %d, %d\n", data->map->f_rgb[0],
-		data->map->f_rgb[1], data->map->f_rgb[2]);
-	printf("Ceiling RGB: %d, %d, %d\n", data->map->c_rgb[0],
-		data->map->c_rgb[1], data->map->c_rgb[2]);
-}
-
 void	add_data(t_data *data, char *identifier, char *value)
 {
 	if (!strcmp(identifier, "NO"))
@@ -182,39 +170,52 @@ void	parse_fc(t_data *data, char **values, int count, int *parsed_count)
 	add_color(data, values);
 }
 
+static int	is_empty_line(char *line, int *i)
+{
+	*i = 0;
+	while (line[*i] == 32 || (line[*i] >= 9 && line[*i] <= 13))
+		(*i)++;
+	if (!line[*i] || line[*i] == '\n')
+		return (1);
+	return (0);
+}
+
+static void	add_line_to_map(t_map *map, char *line, int count)
+{
+	char	**tmp;
+
+	tmp = realloc(map->map, sizeof(char *) * (count + 2));
+	if (!tmp)
+	{
+		free(line);
+		error("Memory reallocation failed");
+	}
+	map->map = tmp;
+	map->map[count] = ft_strdup(line);
+	if (!map->map[count])
+		error("String duplication failed");
+	map->map[count + 1] = NULL;
+}
+
 int	store_map(t_map *map, int fd)
 {
 	char	*line;
 	int		i;
 	int		count;
-	char	**tmp;
 
 	map->map = NULL;
 	count = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
-		i = 0;
-		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
-			i++;
-		if (!line[i] || line[i] == '\n')
+		if (is_empty_line(line, &i))
 		{
 			free(line);
 			line = get_next_line(fd);
 			continue ;
 		}
-		tmp = realloc(map->map, sizeof(char *) * (count + 2));
-		if (!tmp)
-		{
-			free(line);
-			error("Memory reallocation failed");
-		}
-		map->map = tmp;
-		map->map[count] = ft_strdup(line);
-		if (!map->map[count])
-			error("String duplication failed");
+		add_line_to_map(map, line, count);
 		count++;
-		map->map[count] = NULL;
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -463,7 +464,6 @@ int	main(int ac, char **av)
 	init_player_direction(data);
 	data->textures = init_textures();
 	load_textures(data);
-	print_data(data);
 	init_mlx(data);
 	mlx_loop_hook(data->mlx, &loop_hook, data);
 	mlx_loop(data->mlx);
