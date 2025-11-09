@@ -12,8 +12,8 @@ SRCS = $(SRC_DIR)/main.c \
 	   $(GNL_DIR)/get_next_line.c \
 	   $(GNL_DIR)/get_next_line_utils.c \
 	   visualasation/inti_mlx.c \
-	   ./raycating.c \
-	   ./texture.c \
+	   ./raycating.c raycasting1.c raycasting2.c \
+	   ./texture.c texture1.c texture2.c \
 	   ./handle_input.c
 
 

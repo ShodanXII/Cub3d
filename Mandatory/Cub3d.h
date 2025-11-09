@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:20:43 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/09 21:11:35 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/11/09 21:50:47 by achat            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,18 @@ typedef struct s_player
 void			cast_rays(t_data *data);
 void			init_player_direction(t_data *data);
 void			render_frame(t_data *data);
+int	clamp_coord(int v, int max);
+void	init_ray(t_ray *ray, t_data *data, int x);
+void	check_map_bounds(t_ray *ray);
+void	check_wall_collision(t_ray *ray, t_data *data);
 void			render_background(t_data *data);
+void	update_ray_position(t_ray *ray);
+void	calculate_step_and_side_dist(t_ray *ray, t_data *data);
+unsigned char	get_alpha(mlx_texture_t *tex, unsigned char *p, int i);
 void			load_textures(t_data *data);
 mlx_texture_t	*get_wall_texture(t_data *data, t_ray *ray);
 double			calculate_wall_x(t_ray *ray, t_data *data);
+void	get_rgb(unsigned char *p, int i, unsigned char *rgb);
 void			calculate_texture_coords(t_ray *ray, t_wall *wall, 
 					mlx_texture_t *texture, double wall_x);
 uint32_t		get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y);
