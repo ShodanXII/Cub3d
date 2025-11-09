@@ -6,11 +6,37 @@
 /*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 10:00:00 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/09 21:51:41 by achat            ###   ########.fr       */
+/*   Updated: 2025/11/09 22:02:32 by achat            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cub3d.h"
+
+void	handle_movement_ws(t_data *data, double move_speed)
+{
+	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
+	{
+		if (data->map->map[(int)(data->player->pos_y)]
+			[(int)(data->player->pos_x + data->player->dir_x
+				* move_speed)] != '1')
+			data->player->pos_x += data->player->dir_x * move_speed;
+		if (data->map->map[(int)(data->player->pos_y
+				+ data->player->dir_y * move_speed)]
+			[(int)(data->player->pos_x)] != '1')
+			data->player->pos_y += data->player->dir_y * move_speed;
+	}
+	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
+	{
+		if (data->map->map[(int)(data->player->pos_y)]
+			[(int)(data->player->pos_x - data->player->dir_x
+				* move_speed)] != '1')
+			data->player->pos_x -= data->player->dir_x * move_speed;
+		if (data->map->map[(int)(data->player->pos_y
+				- data->player->dir_y * move_speed)]
+			[(int)(data->player->pos_x)] != '1')
+			data->player->pos_y -= data->player->dir_y * move_speed;
+	}
+}
 
 void	init_player_direction(t_data *data)
 {

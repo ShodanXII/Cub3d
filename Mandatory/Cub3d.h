@@ -6,7 +6,7 @@
 /*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:20:43 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/09 21:50:47 by achat            ###   ########.fr       */
+/*   Updated: 2025/11/09 22:34:56 by achat            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,20 +123,34 @@ int	clamp_coord(int v, int max);
 void	init_ray(t_ray *ray, t_data *data, int x);
 void	check_map_bounds(t_ray *ray);
 void	check_wall_collision(t_ray *ray, t_data *data);
+t_map	*init_data_map(void);
+void	add_data(t_data *data, char *identifier, char *value);
+void	add_color(t_data *data, char **values);
+void	free_split(char **split);
+void	free_split(char **split);
+void	parse_side(t_data *data, char **work, int count, int *parsed_count);
+void	error(char *str);
+char	*ft_strtrim(char const *s1, char const *set);
+void	handle_movement_ws(t_data *data, double move_speed);
 void			render_background(t_data *data);
 void	update_ray_position(t_ray *ray);
+int store_map(t_map *map, int fd);
 void	calculate_step_and_side_dist(t_ray *ray, t_data *data);
 unsigned char	get_alpha(mlx_texture_t *tex, unsigned char *p, int i);
 void			load_textures(t_data *data);
+int	count_words(char const *str, char c, char a);
 mlx_texture_t	*get_wall_texture(t_data *data, t_ray *ray);
+void	add_data(t_data *data, char *identifier, char *value);
 double			calculate_wall_x(t_ray *ray, t_data *data);
 void	get_rgb(unsigned char *p, int i, unsigned char *rgb);
 void			calculate_texture_coords(t_ray *ray, t_wall *wall, 
 					mlx_texture_t *texture, double wall_x);
+int	is_valid_char(char c);
 uint32_t		get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y);
 void			draw_textured_wall(t_data *data, int x, t_wall *wall, 
 					mlx_texture_t *texture);
 t_textures		*init_textures(void);
+void	parse_fc(t_data *data, char **values, int count, int *parsed_count);
 char			*ft_strtrim(char const *s1, char const *set);
 void			cleanup_textures(t_data *data);
 
