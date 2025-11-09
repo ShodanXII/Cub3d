@@ -19,29 +19,17 @@ void	load_textures(t_data *data)
 	char	*ea_path;
 	char	*we_path;
 
-	// Remove newline characters from paths
 	no_path = ft_strtrim(data->map->no_path, "\n\r");
 	so_path = ft_strtrim(data->map->so_path, "\n\r");
 	ea_path = ft_strtrim(data->map->ea_path, "\n\r");
 	we_path = ft_strtrim(data->map->we_path, "\n\r");
-
-	printf("Loading textures:\n");
-	printf("North: %s\n", no_path);
-	printf("South: %s\n", so_path);
-	printf("East: %s\n", ea_path);
-	printf("West: %s\n", we_path);
-
 	data->textures->north = mlx_load_png(no_path);
 	data->textures->south = mlx_load_png(so_path);
 	data->textures->east = mlx_load_png(ea_path);
 	data->textures->west = mlx_load_png(we_path);
-
 	if (!data->textures->north || !data->textures->south || 
 		!data->textures->east || !data->textures->west)
 		error("Failed to load one or more textures");
-
-	printf("All textures loaded successfully!\n");
-
 	free(no_path);
 	free(so_path);
 	free(ea_path);
@@ -50,18 +38,18 @@ void	load_textures(t_data *data)
 
 mlx_texture_t	*get_wall_texture(t_data *data, t_ray *ray)
 {
-	if (ray->side == 0) // Vertical walls (hitting from left/right)
+	if (ray->side == 0)
 	{
-		if (ray->dir_x > 0) // Ray going right, hit west face of wall
+		if (ray->dir_x > 0)
 			return (data->textures->west);
-		else // Ray going left, hit east face of wall
+		else
 			return (data->textures->east);
 	}
-	else // Horizontal walls (hitting from top/bottom)
+	else 
 	{
-		if (ray->dir_y > 0) // Ray going down, hit north face of wall
+		if (ray->dir_y > 0)
 			return (data->textures->north);
-		else // Ray going up, hit south face of wall
+		else 
 			return (data->textures->south);
 	}
 }
@@ -70,65 +58,64 @@ double	calculate_wall_x(t_ray *ray, t_data *data)
 {
 	double	wall_x;
 
-	// Calculate where exactly the wall was hit
-	if (ray->side == 0) // Vertical wall
+	if (ray->side == 0)
 		wall_x = data->player->pos_y + ray->perp_wall_dist * ray->dir_y;
-	else // Horizontal wall
+	else 
 		wall_x = data->player->pos_x + ray->perp_wall_dist * ray->dir_x;
-	
-	// Get fractional part only
 	wall_x -= floor(wall_x);
-	
 	return (wall_x);
 }
 
 void	calculate_texture_coords(t_ray *ray, t_wall *wall, 
 								mlx_texture_t *texture, double wall_x)
 {
-	// Calculate x coordinate on the texture
 	wall->tex_x = (int)(wall_x * (double)texture->width);
-	
-	// Flip texture coordinates based on ray direction to avoid mirroring
 	if (ray->side == 0 && ray->dir_x < 0)
 		wall->tex_x = texture->width - wall->tex_x - 1;
 	if (ray->side == 1 && ray->dir_y > 0)
 		wall->tex_x = texture->width - wall->tex_x - 1;
-	
-	// Calculate how much to increase the texture coordinate per screen pixel
 	wall->step = 1.0 * texture->height / wall->line_height;
-	
-	// Calculate starting texture coordinate
 	wall->tex_pos = (wall->draw_start - SCREEN_HEIGHT / 2 + 
-					wall->line_height / 2) * wall->step;
+			wall->line_height / 2) * wall->step;
 }
 
-uint32_t	get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y)
+static int	clamp_coord(int v, int max)
 {
-	int		index;
-	uint8_t	*pixels;
-	uint8_t	r, g, b, a;
+	if (v < 0)
+		return (0);
+	if (v >= max)
+		return (max - 1);
+	return (v);
+}
 
-	// Clamp texture coordinates to valid range
-	if (tex_x < 0)
-		tex_x = 0;
-	if (tex_x >= (int)texture->width)
-		tex_x = texture->width - 1;
-	if (tex_y < 0)
-		tex_y = 0;
-	if (tex_y >= (int)texture->height)
-		tex_y = texture->height - 1;
+static unsigned char	get_alpha(mlx_texture_t *tex, unsigned char *p, int i)
+{
+	if (tex->bytes_per_pixel == 4)
+		return (p[i + 3]);
+	return (255);
+}
 
-	pixels = texture->pixels;
-	index = (tex_y * texture->width + tex_x) * texture->bytes_per_pixel;
-	
-	// Extract RGBA values
-	r = pixels[index];
-	g = pixels[index + 1];
-	b = pixels[index + 2];
-	a = (texture->bytes_per_pixel == 4) ? pixels[index + 3] : 255;
-	
-	// Return color in RGBA format for MLX42
-	return ((r << 24) | (g << 16) | (b << 8) | a);
+static void	get_rgb(unsigned char *p, int i, unsigned char *rgb)
+{
+	rgb[0] = p[i];
+	rgb[1] = p[i + 1];
+	rgb[2] = p[i + 2];
+}
+
+unsigned int	get_texture_color(mlx_texture_t *tex, int x, int y)
+{
+	int				i;
+	unsigned char	*p;
+	unsigned char	rgb[3];
+	unsigned char	a;
+
+	x = clamp_coord(x, tex->width);
+	y = clamp_coord(y, tex->height);
+	p = tex->pixels;
+	i = (y * tex->width + x) * tex->bytes_per_pixel;
+	get_rgb(p, i, rgb);
+	a = get_alpha(tex, p, i);
+	return ((rgb[0] << 24) | (rgb[1] << 16) | (rgb[2] << 8) | a);
 }
 
 void	draw_textured_wall(t_data *data, int x, t_wall *wall, 
@@ -141,14 +128,9 @@ void	draw_textured_wall(t_data *data, int x, t_wall *wall,
 	y = wall->draw_start;
 	while (y <= wall->draw_end)
 	{
-		// Calculate texture y coordinate
 		tex_y = (int)wall->tex_pos;
 		wall->tex_pos += wall->step;
-		
-		// Get pixel color from texture
 		color = get_texture_color(texture, wall->tex_x, tex_y);
-		
-		// Draw pixel
 		mlx_put_pixel(data->img, x, y, color);
 		y++;
 	}

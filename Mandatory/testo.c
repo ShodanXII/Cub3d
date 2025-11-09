@@ -6,11 +6,15 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/07 12:04:03 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/11/09 12:04:03 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cub3d.h"
+
+/* ==========================
+   Original functions <25 lines
+   ========================== */
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
@@ -318,29 +322,47 @@ void	header_map(t_data *data, char *line, int count, int *parsed_count)
 	free_split(work);
 }
 
+/* ==========================
+   Split helpers for parsing()
+   ========================== */
+
+static void	skip_whitespace(char **line, int *i)
+{
+	while ((*line)[*i] == 32 || ((*line)[*i] >= 9 && (*line)[*i] <= 13))
+		(*i)++;
+}
+
+static int	process_line(t_map *map, t_data *data, char *line,
+				int *parsed_count)
+{
+	int	count;
+	int	i;
+
+	count = count_words(line, 32, ',');
+	i = 0;
+	skip_whitespace(&line, &i);
+	if (!line[i] || line[i] == '\n')
+		return (0);
+	if (*parsed_count != 6)
+		header_map(data, line, count, parsed_count);
+	return (1);
+}
+
 int	parsing(t_map *map, int fd, t_data *data)
 {
 	char	*line;
-	int		i;
-	int		count;
 	int		parsed_count;
 
 	parsed_count = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
-		count = count_words(line, 32, ',');
-		i = 0;
-		while (line[i] == 32 || (line[i] >= 9 && line[i] <= 13))
-			i++;
-		if (!line[i] || line[i] == '\n')
+		if (!process_line(map, data, line, &parsed_count))
 		{
 			free(line);
 			line = get_next_line(fd);
 			continue ;
 		}
-		if (parsed_count != 6)
-			header_map(data, line, count, &parsed_count);
 		if (parsed_count == 6)
 		{
 			free(line);
@@ -350,6 +372,22 @@ int	parsing(t_map *map, int fd, t_data *data)
 		line = get_next_line(fd);
 	}
 	return (0);
+}
+
+/* ==========================
+   Split helpers for init_player()
+   ========================== */
+
+static void	set_player_rotation(t_player *player, char c)
+{
+	if (c == 'S')
+		player->rot_angle = PI / 2;
+	else if (c == 'N')
+		player->rot_angle = 3 * PI / 2;
+	else if (c == 'E')
+		player->rot_angle = 0;
+	else if (c == 'W')
+		player->rot_angle = PI;
 }
 
 void	init_player(t_data *data)
@@ -369,14 +407,7 @@ void	init_player(t_data *data)
 			{
 				data->player->pos_x = x + 0.5;
 				data->player->pos_y = y + 0.5;
-				if (c == 'S')
-					data->player->rot_angle = PI / 2;
-				else if (c == 'N')
-					data->player->rot_angle = 3 * PI / 2;
-				else if (c == 'E')
-					data->player->rot_angle = 0;
-				else if (c == 'W')
-					data->player->rot_angle = PI;
+				set_player_rotation(data->player, c);
 				data->map->map[y][x] = '0';
 				return ;
 			}
@@ -387,31 +418,51 @@ void	init_player(t_data *data)
 	error("No player found in map");
 }
 
+/* ==========================
+   Split helpers for main()
+   ========================== */
+
+static void	validate_args(int ac, char **av, int *fd)
+{
+	int	len;
+
+	if (ac != 2)
+		error("Usage: ./cub3d <map.cub>");
+	len = ft_strlen(av[1]);
+	*fd = open(av[1], O_RDONLY);
+	if (len < 4 || strcmp(av[1] + len - 4, ".cub") || *fd == -1)
+		error("Invalid file format or file not found");
+}
+
+static t_data	*init_game_data(void)
+{
+	t_data	*data;
+
+	data = malloc(sizeof(t_data));
+	if (!data)
+		error("Memory allocation failed");
+	data->player = malloc(sizeof(t_player));
+	if (!data->player)
+		error("Memory allocation failed");
+	return (data);
+}
+
 int	main(int ac, char **av)
 {
 	t_map	*map;
 	t_data	*data;
-	int		len;
 	int		fd;
 
-	data = malloc(sizeof(t_data));
-	data->player = malloc(sizeof(t_player));
-	if (!data || !data->player)
-		error("Memory allocation failed");
-	if (ac != 2)
-		error("Usage: ./cub3d <map.cub>");
-	len = ft_strlen(av[1]);
-	fd = open(av[1], O_RDONLY);
-	if (len < 4 || strcmp(av[1] + len - 4, ".cub") || fd == -1)
-		error("Invalid file format or file not found");
+	data = init_game_data();
+	validate_args(ac, av, &fd);
 	map = init_data_map();
 	data->map = map;
 	if (parsing(map, fd, data))
 		parse_map(map, fd);
 	init_player(data);
 	init_player_direction(data);
-	data->textures = init_textures();  // Add this line
-	load_textures(data); 
+	data->textures = init_textures();
+	load_textures(data);
 	print_data(data);
 	init_mlx(data);
 	mlx_loop_hook(data->mlx, &loop_hook, data);
