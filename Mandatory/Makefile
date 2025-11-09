@@ -13,8 +13,8 @@ SRCS = $(SRC_DIR)/main.c main_helper2.c main_helper.c \
 	   $(GNL_DIR)/get_next_line_utils.c \
 	   visualasation/inti_mlx.c \
 	   ./raycating.c raycasting1.c raycasting2.c \
-	   ./texture.c texture1.c texture2.c  utils.c\
-	   ./handle_input.c
+	   ./texture.c texture1.c texture2.c  utils.c utils2.c utils3.c\
+	   ./handle_input.c 
 
 
 OBJS = $(SRCS:.c=.o)

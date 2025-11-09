@@ -6,7 +6,7 @@
 /*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 22:27:46 by achat             #+#    #+#             */
-/*   Updated: 2025/11/09 22:39:56 by achat            ###   ########.fr       */
+/*   Updated: 2025/11/09 23:03:29 by achat            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	new_ptr = malloc(new_size);
 	if (!new_ptr)
 		return (NULL);
-
 	if (old_size < new_size)
 		ft_memcpy(new_ptr, ptr, old_size);
 	else
