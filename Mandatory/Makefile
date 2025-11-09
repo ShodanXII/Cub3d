@@ -13,7 +13,8 @@ SRCS = $(SRC_DIR)/testo.c \
 	   $(GNL_DIR)/get_next_line_utils.c \
 	   visualasation/inti_mlx.c \
 	   ./raycating.c \
-	   ./texture.c
+	   ./texture.c \
+	   ./handle_input.c
 
 
 OBJS = $(SRCS:.c=.o)
