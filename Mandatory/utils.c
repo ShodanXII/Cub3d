@@ -6,7 +6,7 @@
 /*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 22:27:46 by achat             #+#    #+#             */
-/*   Updated: 2025/11/09 23:03:29 by achat            ###   ########.fr       */
+/*   Updated: 2025/11/09 23:14:40 by achat            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ static void	append_line(t_map *map, char *line, int count)
 {
 	char	**tmp;
 
-	tmp = realloc(map->map, sizeof(char *) * (count + 2));
+	tmp = ft_realloc(map->map, sizeof(char *) * 
+			count, sizeof(char *) * (count + 2));
 	if (!tmp)
 	{
 		free(line);
