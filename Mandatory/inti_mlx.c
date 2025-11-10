@@ -6,11 +6,11 @@
 /*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 15:05:04 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/07 11:18:49 by ouel-afi         ###   ########.fr       */
+/*   Updated: 2025/11/10 10:25:26 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Cub3d.h"
+#include "Cub3d.h"
 
 void	init_mlx(t_data *data)
 {

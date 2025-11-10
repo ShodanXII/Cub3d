@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 11:09:10 by ouel-afi          #+#    #+#             */
-/*   Updated: 2025/11/09 23:17:07 by achat            ###   ########.fr       */
+/*   Updated: 2025/11/10 10:28:03 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,6 @@ static t_data	*init_game_data(void)
 	return (data);
 }
 
-void ll()
-{
-	system("leaks -q cub3d");
-}
-
 int	main(int ac, char **av)
 {
 	t_map	*map;
@@ -99,7 +94,6 @@ int	main(int ac, char **av)
 	init_player_direction(data);
 	data->textures = init_textures();
 	load_textures(data);
-	ll();
 	init_mlx(data);
 	mlx_loop_hook(data->mlx, &loop_hook, data);
 	mlx_loop(data->mlx);

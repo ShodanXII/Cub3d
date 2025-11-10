@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achat <achat@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ouel-afi <ouel-afi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 22:42:27 by achat             #+#    #+#             */
-/*   Updated: 2025/11/09 23:55:22 by achat            ###   ########.fr       */
+/*   Updated: 2025/11/10 10:07:14 by ouel-afi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	is_empty_line(char *line)
 	while (line[i])
 	{
 		if (line[i] != ' ' && line[i] != '\t' && 
-				line[i] != '\n' && line[i] != '\r')
+			line[i] != '\n' && line[i] != '\r')
 			return (0);
 		i++;
 	}
